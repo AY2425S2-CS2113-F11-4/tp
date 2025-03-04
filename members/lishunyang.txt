@@ -1,0 +1,4 @@
+name: lishunyang
+hobby: robotics
+major: computer engineering
+nationality: Chinese
