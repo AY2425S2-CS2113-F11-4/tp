@@ -16,7 +16,7 @@ public class CommandQuizFlashcards extends Command{
     @Override
     public void executeCommand() {
         try {
-            currentDeck.quizFlashcards();
+            currentDeck.quizFlashcards(true);
         } catch (EmptyListException e) {
             Ui.showError(e.getMessage());
         } catch (QuizCancelledException e) {

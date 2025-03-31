@@ -32,4 +32,6 @@ public class SuccessMessages {
             "Question: %s\n" +
             "Answer: %s\n" +
             "Code Snippet: %s\n";
+    public static final String QUIZRESULT_FULL_MARKS = "Great job! You have answered all of questions correctly.";
+    public static final String VIEW_QUIZRESULT_SUCCESS = "This is the end of the test report.";
 }

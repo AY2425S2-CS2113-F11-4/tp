@@ -20,5 +20,4 @@ public class QuizMessages {
     public static final String QUIZ_INCORRECT = "Incorrect.";
     public static final String QUIZ_QUESTIONS_LEFT = "You have %s questions left:";
     public static final String QUIZ_LAST_QUESTION = "You have 1 question left:";
-
 }

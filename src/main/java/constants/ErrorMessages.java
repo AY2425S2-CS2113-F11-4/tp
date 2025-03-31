@@ -17,7 +17,7 @@ public class ErrorMessages {
     public static final String EMPTY_DECK_NUMBER = "Deck number cannot be left empty.";
     public static final String NO_DECK_TO_SWITCH = "No decks available. Create a deck before selecting.";
     public static final String POSSIBLE_COMMANDS =
-            "Possible commands are: add, view_qn, view_ans, edit, list, delete, insert_code, quiz" +
+            "Possible commands are: add, view_qn, view_ans, view_res, edit, list, delete, insert_code, quiz" +
                     "new, select, rename, decks and exit";
     public static final String NO_DECK_ERROR = "Select a deck first!";
     public static final String EMPTY_DECK_NAME = "Deck name must not be empty!";
@@ -25,7 +25,9 @@ public class ErrorMessages {
     public static final String UNCHANGED_DECK_NAME = "Deck name is unchanged!";
     public static final String NO_SUCH_DECK = "Deck does not exist!";
     public static final String NO_DECK_TO_VIEW = "No decks available. Create a deck to start.";
+    public static final String INCOMPLETED_QUIZ = "Complete a quiz first";
+    public static final String MISMATCHED_ARRAYS = "Attempted to view Quiz results, but incorrectindexsize, incorrectFlashcarsize, and incorrectAnswersize are mismatched.";
     public static final String INSERT_MISSING_FIELD = "Missing /c in input.";
-    public static final String INSERT_MISSING_CODE = "Code snippet cannot be empty.";
+    public static final String INSERT_MISSING_CODE = "The quiz has not been started or completed yet, no result is available";
     public static final String INSERT_USAGE = "Usage: insert_code {INDEX} /c {CODE_SNIPPET}";
 }

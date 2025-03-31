@@ -2,7 +2,9 @@ package deck;
 
 import exceptions.EmptyListException;
 import exceptions.FlashCLIArgumentException;
+import exceptions.QuizCancelledException;
 
+import static constants.CommandConstants.ANOTHER;
 import static constants.ErrorMessages.CREATE_INVALID_ORDER;
 import static constants.ErrorMessages.CREATE_MISSING_DESCRIPTION;
 import static constants.ErrorMessages.CREATE_MISSING_FIELD;
@@ -10,6 +12,8 @@ import static constants.ErrorMessages.EMPTY_LIST;
 import static constants.ErrorMessages.INSERT_MISSING_CODE;
 import static constants.ErrorMessages.INSERT_MISSING_FIELD;
 import static constants.ErrorMessages.VIEW_OUT_OF_BOUNDS;
+import static constants.ErrorMessages.INCOMPLETED_QUIZ;
+import static constants.ErrorMessages.MISMATCHED_ARRAYS;
 import static constants.QuizMessages.QUIZ_CANCEL;
 import static constants.QuizMessages.QUIZ_CANCEL_MESSAGE;
 import static constants.QuizMessages.QUIZ_CORRECT;
@@ -26,6 +30,9 @@ import static constants.SuccessMessages.INSERT_SUCCESS;
 import static constants.SuccessMessages.LIST_SUCCESS;
 import static constants.SuccessMessages.VIEW_ANSWER_SUCCESS;
 import static constants.SuccessMessages.VIEW_QUESTION_SUCCESS;
+import static constants.SuccessMessages.VIEW_QUIZRESULT_SUCCESS;
+import static constants.SuccessMessages.QUIZRESULT_FULL_MARKS;
+import static deck.DeckManager.currentDeck;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -57,7 +64,8 @@ public class Deck {
     private final ArrayList<Flashcard> incorrectFlashcards = new ArrayList<>();
     private final ArrayList<Integer> incorrectIndexes = new ArrayList<>();
     private final ArrayList<String> incorrectAnswers = new ArrayList<>();
-
+    private static ArrayList<Flashcard> queue = new ArrayList<>();
+    private static boolean isQuizCompleted = false;
 
 
     /**
@@ -278,9 +286,17 @@ public class Deck {
      * @throws EmptyListException if there are no flashcards in the deck
      */
     //@@author felfelyuen
-    public boolean quizFlashcards() throws EmptyListException, QuizCancelledException {
+    public boolean quizFlashcards(boolean isFullDeckTest) throws EmptyListException, QuizCancelledException {
+        ArrayList<Flashcard> testedflashcards;
+        if (isFullDeckTest == true) {
+            testedflashcards = flashcards;
+
+        } else {
+            testedflashcards = incorrectFlashcards;
+        }
+
         logger.info("starting to enter quiz mode:");
-        if (flashcards.isEmpty()) {
+        if (testedflashcards.isEmpty()) {
             throw new EmptyListException(EMPTY_LIST);
         }
 
@@ -288,9 +304,10 @@ public class Deck {
         incorrectFlashcards.clear();
         incorrectAnswers.clear();
 
-        logger.info("Found " + flashcards.size() + " flashcards in the deck");
+        logger.info("There are " + testedflashcards.size() + " flashcards in this test");
         logger.info("starting shuffling:");
-        ArrayList<Flashcard> queue = shuffleDeck(flashcards);
+        queue = testedflashcards;
+        logger.info("There are " + queue.size() + " flashcards in this test");
 
         Ui.showToUser(QUIZ_START);
         int lastIndex = queue.size() - 1;
@@ -298,10 +315,13 @@ public class Deck {
         for (int i = 0; i < lastIndex; i++) {
             int questionsLeft = queue.size() - i;
             Ui.showToUser(String.format(QUIZ_QUESTIONS_LEFT, questionsLeft));
+            Ui.showToUser(queue.get(i).getQuestion());
             handleQuestionForQuiz(queue.get(i));
         }
         logger.info("Last question:");
+        Ui.showToUser(queue.get(lastIndex).getQuestion());
         Ui.showToUser(QUIZ_LAST_QUESTION);
+        Ui.showToUser(queue.get(lastIndex).getQuestion());
         handleQuestionForQuiz(queue.get(lastIndex));
 
         logger.info("Finished asking questions, tabulating timer amount:");
@@ -313,6 +333,7 @@ public class Deck {
 
         logger.info("Exiting quiz mode:");
         Ui.showToUser(String.format(QUIZ_END, timerAmount));
+        isQuizCompleted = true;
         return true;
     }
 
@@ -324,7 +345,9 @@ public class Deck {
      */
     //@@author felfelyuen
     public void handleQuestionForQuiz(Flashcard indexCard) throws QuizCancelledException {
+        Ui.showToUser("The line before qus");
         Ui.showToUser(indexCard.getQuestion());
+        Ui.showToUser("THe line after qus");
 
         String userAnswer = Ui.getUserCommand().trim();
         while (userAnswer.isEmpty()) {
@@ -355,6 +378,9 @@ public class Deck {
             throws QuizCancelledException {
         if(userAnswer.equals(QUIZ_CANCEL)) {
             logger.info("Quiz cancelled by user. Exiting quiz:");
+            incorrectIndexes.clear();
+            incorrectFlashcards.clear();
+            incorrectAnswers.clear();
             throw new QuizCancelledException(QUIZ_CANCEL_MESSAGE);
         }
 
@@ -371,6 +397,89 @@ public class Deck {
         }
     }
 
+
+    /**
+     <<<<<<< HEAD
+     * Handles showing result upon the completion of a quiz
+     *
+     * @return a success message indicating the result has been shown.
+     * @throws  FlashCLIArgumentException if the quiz is not completed or mismatched arrays
+     */
+    //@@author shunyang12
+    public String showQuizResult() throws FlashCLIArgumentException {
+        logger.info("Trying to generate your quiz result...");
+
+        if (isQuizCompleted == false) {
+            throw new FlashCLIArgumentException(INCOMPLETED_QUIZ);
+        }
+
+        int incorrectAnswersSize = incorrectAnswers.size();
+        int incorrectIndexesSize = incorrectIndexes.size();
+        int incorrectFlashcardsSize = incorrectFlashcards.size();
+        int totalQuestionsSize = queue.size();
+
+        if (incorrectAnswersSize != incorrectIndexesSize | incorrectAnswersSize != incorrectFlashcardsSize | incorrectIndexesSize != incorrectFlashcardsSize) {
+            throw new FlashCLIArgumentException(MISMATCHED_ARRAYS);
+        }
+
+        Ui.showToUser("You have answered " + totalQuestionsSize + " questions in the quiz.");
+
+        if (incorrectAnswersSize == 0) {
+            return QUIZRESULT_FULL_MARKS;
+        }
+
+        Ui.showToUser("You got " + (totalQuestionsSize-incorrectAnswersSize) + " questions correctly.");
+        Ui.showToUser("You got " + incorrectAnswersSize + " questions incorrectly.");
+
+        Ui.showToUser("Review your mistakes: ");
+
+        showMistakes();
+
+//        ChooseToEnterAnotherRound();
+
+        return VIEW_QUIZRESULT_SUCCESS;
+    }
+
+    /**
+     * Handles showing result upon the completion of a quiz
+     *
+     * @throws  FlashCLIArgumentException if the quiz is not completed or mismatched arrays
+     */
+    //@@author shunyang12
+    public void showMistakes() throws ArrayIndexOutOfBoundsException {
+        int wrongAnswerCount = 0;
+        for (Integer indexIncorrect: incorrectIndexes) {
+            if(indexIncorrect < 0 | indexIncorrect >= queue.size() ) {
+                throw new ArrayIndexOutOfBoundsException(VIEW_OUT_OF_BOUNDS);
+            }
+
+            Ui.showToUser("FlashCard " + indexIncorrect + " question: " + flashcards.get(indexIncorrect).getQuestion() +
+                    " correct answer: " + flashcards.get(indexIncorrect).getAnswer() + " Your answer: " +
+                    incorrectAnswers.get(wrongAnswerCount));
+            wrongAnswerCount++;
+        }
+    }
+
+    /**
+     * Give user another chance to take the quiz with only wrong answers from the last round, enhancing their understanding
+     *
+     */
+//    //@@author shunyang12
+//    public void ChooseToEnterAnotherRound() {
+//        Ui.showToUser("Enter another to have a second quiz reviewing only your wrong questions. enter any message to continue");
+//        String fullInputLine = Ui.getUserCommand();
+//        if(fullInputLine.equals(ANOTHER)) {
+//            try {
+//                quizFlashcards(false);;
+//            } catch (EmptyListException e) {
+//                Ui.showError(e.getMessage());
+//            } catch (QuizCancelledException e) {
+//                Ui.showToUser(e.getMessage());
+//            }
+//        } else {
+//            Ui.showToUser("Continue...");
+//        }
+//    }
     /**
      * Inserts code snippets to the flashcard
      *
@@ -406,6 +515,42 @@ public class Deck {
                 insertFlashcard.getQuestion(), insertFlashcard.getAnswer(),
                 formattedCodeSnippet);
     }
+
+    /**
+     * Inserts code snippets to the flashcard
+     *
+     * @param index     index of flashcard to insert code snippet
+     * @param arguments user inputs containing updated question and answer
+     * @return the updated flashcard in the format of EDIT_SUCCESS
+     * @throws ArrayIndexOutOfBoundsException if the index is outside of list size
+     */
+//    //@@author ElonKoh
+//    public String insertCodeSnippet(int index, String arguments)
+//            throws ArrayIndexOutOfBoundsException,
+//            FlashCLIArgumentException {
+//        boolean containsAllArguments = arguments.contains("/c");
+//        if (!containsAllArguments) {
+//            throw new FlashCLIArgumentException(INSERT_MISSING_FIELD);
+//        }
+//        int codeStart = arguments.indexOf("/c");
+//
+//        if (index <= 0 || index > flashcards.size()) {
+//            throw new ArrayIndexOutOfBoundsException(VIEW_OUT_OF_BOUNDS);
+//        }
+//        String codeSnippet = arguments.substring(codeStart + "/c".length()).trim();
+//        if (codeSnippet.isEmpty()) {
+//            throw new FlashCLIArgumentException(INSERT_MISSING_CODE);
+//        }
+//        String formattedCodeSnippet = Parser.parseCodeSnippet(codeSnippet);
+//
+//        int arrayIndex = index - 1;
+//        Flashcard insertFlashcard = flashcards.get(arrayIndex);
+//
+//        insertFlashcard.setCodeSnippet(formattedCodeSnippet);
+//        return String.format(INSERT_SUCCESS,
+//                insertFlashcard.getQuestion(), insertFlashcard.getAnswer(),
+//                formattedCodeSnippet);
+//    }
 
 
 

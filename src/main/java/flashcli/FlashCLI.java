@@ -11,9 +11,15 @@ import ui.Ui;
 import static ui.Ui.getUserCommand;
 
 public class FlashCLI {
+
+    private String user_input;
     /**
      * Main entry-point for the java.flashcli.FlashCLI application.
      */
+    public String getUserInput(){
+        return user_input;
+
+    }
     public static void main(String[] args) {
         System.out.println("Welcome to FlashCLI!");
         LoggingSetup.configureGlobalLogging();

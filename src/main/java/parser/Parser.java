@@ -13,6 +13,7 @@ import command.CommandSwitchDeck;
 import command.CommandViewAnswer;
 import command.CommandViewDecks;
 import command.CommandViewQuestion;
+import command.CommandViewQuizResult;
 import exceptions.FlashCLIArgumentException;
 
 import static constants.CommandConstants.CREATE;
@@ -27,11 +28,13 @@ import static constants.CommandConstants.SWITCH_DECK;
 import static constants.CommandConstants.VIEW_ANS;
 import static constants.CommandConstants.VIEW_DECKS;
 import static constants.CommandConstants.VIEW_QN;
+import static constants.CommandConstants.VIEW_RES;
 import static constants.ErrorMessages.NO_DECK_ERROR;
 import static constants.ErrorMessages.POSSIBLE_COMMANDS;
 import static deck.DeckManager.currentDeck;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,26 +59,41 @@ public class Parser {
         assert arguments != null : "Arguments should not be null";
 
         ArrayList<String> commandsWithDeck =
-                new ArrayList<>(List.of(CREATE, VIEW_QN, VIEW_ANS, EDIT, LIST, DELETE, QUIZ, RENAME_DECK, INSERT_CODE));
+                new ArrayList<>(Arrays.asList(CREATE, VIEW_QN, VIEW_ANS, VIEW_RES, EDIT, LIST, DELETE, QUIZ, VIEW_RES, RENAME_DECK, INSERT_CODE));
         if (currentDeck == null && commandsWithDeck.contains(command)) {
             throw new FlashCLIArgumentException(NO_DECK_ERROR);
         }
 
-        return switch (command) {
-        case CREATE -> new CommandCreate(arguments);
-        case VIEW_QN -> new CommandViewQuestion(arguments);
-        case VIEW_ANS -> new CommandViewAnswer(arguments);
-        case EDIT -> new CommandEdit(arguments);
-        case LIST -> new CommandListQuestion();
-        case DELETE -> new CommandDelete(arguments);
-        case NEW_DECK -> new CommandCreateDeck(arguments);
-        case SWITCH_DECK -> new CommandSwitchDeck(arguments);
-        case RENAME_DECK -> new CommandRenameDeck(arguments);
-        case VIEW_DECKS -> new CommandViewDecks();
-        case QUIZ -> new CommandQuizFlashcards();
-        case INSERT_CODE -> new CommandInsertCode(arguments);
-        default -> throw new FlashCLIArgumentException(POSSIBLE_COMMANDS);
-        };
+        switch (command) {
+            case CREATE:
+                return new CommandCreate(arguments);
+            case VIEW_QN:
+                return new CommandViewQuestion(arguments);
+            case VIEW_ANS:
+                return new CommandViewAnswer(arguments);
+            case EDIT:
+                return new CommandEdit(arguments);
+            case LIST:
+                return new CommandListQuestion();
+            case DELETE:
+                return new CommandDelete(arguments);
+            case NEW_DECK:
+                return new CommandCreateDeck(arguments);
+            case SWITCH_DECK:
+                return new CommandSwitchDeck(arguments);
+            case RENAME_DECK:
+                return new CommandRenameDeck(arguments);
+            case VIEW_DECKS:
+                return new CommandViewDecks();
+            case QUIZ:
+                return new CommandQuizFlashcards();
+            case VIEW_RES:
+                return new CommandViewQuizResult();
+            case INSERT_CODE:
+                return new CommandInsertCode(arguments);
+            default:
+                throw new FlashCLIArgumentException(POSSIBLE_COMMANDS);
+        }
     }
 
     /**
