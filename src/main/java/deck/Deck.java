@@ -4,7 +4,6 @@ import exceptions.EmptyListException;
 import exceptions.FlashCLIArgumentException;
 import exceptions.QuizCancelledException;
 
-//import static constants.CommandConstants.ANOTHER;
 import static constants.ErrorMessages.CHANGE_IS_LEARNED_MISSING_INDEX;
 import static constants.ErrorMessages.CREATE_INVALID_ORDER;
 import static constants.ErrorMessages.CREATE_MISSING_FIELD;
@@ -482,7 +481,7 @@ public class Deck {
         int wrongAnswerCount = 0;
         for (Integer indexIncorrect: incorrectIndexes) {
             if(indexIncorrect < 0 | indexIncorrect >= queue.size() ) {
-                throw new ArrayIndexOutOfBoundsException(VIEW_OUT_OF_BOUNDS);
+                throw new ArrayIndexOutOfBoundsException(INDEX_OUT_OF_BOUNDS);
             }
 
             Ui.showToUser("FlashCard " + indexIncorrect + " question: " + flashcards.get(indexIncorrect).getQuestion() +
@@ -567,7 +566,7 @@ public class Deck {
         int codeStart = arguments.indexOf("/c");
 
         if (index <= 0 || index > flashcards.size()) {
-            throw new ArrayIndexOutOfBoundsException(VIEW_OUT_OF_BOUNDS);
+            throw new ArrayIndexOutOfBoundsException(INDEX_OUT_OF_BOUNDS);
         }
         String codeSnippet = arguments.substring(codeStart + "/c".length()).trim();
         if (codeSnippet.isEmpty()) {

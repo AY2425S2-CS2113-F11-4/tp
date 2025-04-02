@@ -406,17 +406,17 @@ public class DeckTest {
         }
     }
 
-//    @Test
-//    void quizFlashcards_emptyList_emptyListExceptionThrown() {
-//        try {
-//            boolean quizSuccess = deck.quizFlashcards();
-//            assertTrue(quizSuccess);
-//        } catch (EmptyListException e) {
-//            assertEquals(EMPTY_LIST,e.getMessage());
-//        } catch (QuizCancelledException e) {
-//            fail("Unexpected QuizCancelledException was thrown: " + e.getMessage());
-//        }
-//    }
+    @Test
+    void quizFlashcards_emptyList_emptyListExceptionThrown() {
+        try {
+            boolean quizSuccess = deck.quizFlashcards();
+            assertTrue(quizSuccess);
+        } catch (EmptyListException e) {
+            assertEquals(EMPTY_LIST,e.getMessage());
+        } catch (QuizCancelledException e) {
+            fail("Unexpected QuizCancelledException was thrown: " + e.getMessage());
+        }
+    }
 
     @Test
     void quizFlashcards_cancelQuiz_quizCancelledExceptionThrown() {

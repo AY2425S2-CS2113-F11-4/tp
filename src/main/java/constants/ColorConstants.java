@@ -1,8 +1,10 @@
 package constants;
 
+/**
+ * Contains ANSI color codes and text formatting constants for console output.
+ */
 public class ColorConstants {
-    // ANSI code
-    // ANSI颜色代码
+    // ANSI color codes
     public static final String RESET = "\u001B[0m";
     public static final String BLACK = "\u001B[30m";
     public static final String RED = "\u001B[31m";
@@ -13,6 +15,7 @@ public class ColorConstants {
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
 
+    // Text formatting
     public static final String BOLD = "\u001B[1m";
     public static final String FAINT = "\u001B[2m";
     public static final String ITALIC = "\u001B[3m";
@@ -21,7 +24,7 @@ public class ColorConstants {
     public static final String REVERSE = "\u001B[7m";
     public static final String HIDDEN = "\u001B[8m";
 
-    // 前景色
+    // Rainbow color gradient (foreground colors)
     public static final String[] RAINBOW = {
             "\u001B[38;5;196m", "\u001B[38;5;202m", "\u001B[38;5;208m",
             "\u001B[38;5;214m", "\u001B[38;5;220m", "\u001B[38;5;226m",
@@ -34,7 +37,7 @@ public class ColorConstants {
             "\u001B[38;5;165m", "\u001B[38;5;201m", "\u001B[38;5;200m"
     };
 
-    // 背景色
+    // Background colors
     public static final String BG_BLACK = "\u001B[48;5;16m";
     public static final String BG_GRADIENT = "\u001B[48;5;232m";
 }

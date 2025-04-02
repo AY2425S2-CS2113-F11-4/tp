@@ -17,7 +17,7 @@ public class CommandQuizFlashcards extends Command{
     public void executeCommand() {
         try {
             Ui.loadingeffect();
-            currentDeck.quizFlashcards(true);
+            currentDeck.quizFlashcards();
         } catch (EmptyListException e) {
             Ui.showError(e.getMessage());
         } catch (QuizCancelledException e) {

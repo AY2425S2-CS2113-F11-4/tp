@@ -45,11 +45,7 @@ import static constants.ErrorMessages.POSSIBLE_COMMANDS;
 import static deck.DeckManager.currentDeck;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import ui.Ui;
-import static ui.Ui.*;
 
 /**
  * Parses user input and returns the corresponding command.
@@ -81,21 +77,23 @@ public class Parser {
 
 
         return switch (command) {
+            case ADD_CARD -> new CommandCreate(arguments);
             case VIEW_QN -> new CommandViewQuestion(arguments);
             case VIEW_ANS -> new CommandViewAnswer(arguments);
+            case EDIT_CARD -> new CommandEdit(arguments);
+            case LIST_CARDS -> new CommandListQuestion();
+            case DELETE_CARD -> new CommandDelete(arguments);
+            case INSERT_CODE -> new CommandInsertCode(arguments);
+            case SEARCH_CARD -> new CommandSearchFlashcard(arguments);
+
             case NEW_DECK -> new CommandCreateDeck(arguments);
             case SWITCH_DECK -> new CommandSwitchDeck(arguments);
             case RENAME_DECK -> new CommandRenameDeck(arguments);
             case VIEW_DECKS -> new CommandViewDecks();
+            case DELETE_DECK -> handleDeleteDeckConfirmation(arguments);
+
             case QUIZ -> new CommandQuizFlashcards();
             case VIEW_RES -> new CommandViewQuizResult();
-            case INSERT_CODE -> new CommandInsertCode(arguments);
-            case ADD_CARD -> new CommandCreate(arguments);
-            case EDIT_CARD -> new CommandEdit(arguments);
-            case LIST_CARDS -> new CommandListQuestion();
-            case DELETE_CARD -> new CommandDelete(arguments);
-            case SEARCH_CARD -> new CommandSearchFlashcard(arguments);
-            case DELETE_DECK -> handleDeleteDeckConfirmation(arguments);
             case MARK_UNLEARNED -> new CommandChangeLearned(arguments, false);
             case MARK_LEARNED -> new CommandChangeLearned(arguments, true);
 

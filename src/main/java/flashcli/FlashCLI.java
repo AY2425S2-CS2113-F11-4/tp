@@ -1,7 +1,6 @@
 package flashcli;
 
 import static constants.CommandConstants.EXIT;
-import static constants.ColorConstants.*;
 
 import command.Command;
 import deck.DeckManager;

@@ -18,7 +18,6 @@ public class CommandConstants {
     public static final String QUIZ = "quiz";
     public static final String MARK_UNLEARNED = "mark_unlearned";
     public static final String MARK_LEARNED = "mark_learned";
-    public static final String VIEW_RESULTS = "results";
     public static final String VIEW_RES = "view_res";
 
     // deck commands

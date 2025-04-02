@@ -1,6 +1,11 @@
 package ui;
 
-import static constants.ColorConstants.*;
+import static constants.ColorConstants.BG_BLACK;
+import static constants.ColorConstants.BG_GRADIENT;
+import static constants.ColorConstants.BLINK;
+import static constants.ColorConstants.BOLD;
+import static constants.ColorConstants.RAINBOW;
+import static constants.ColorConstants.RESET;
 import static constants.CommandConstants.EXIT;
 import java.util.Scanner;
 
@@ -42,8 +47,10 @@ public class Ui {
         System.out.println(message);
     }
 
+    /**
+     * Displays the application title with rainbow-colored ASCII art.
+     */
     public static void showTitle() {
-        // 2. ASCII 艺术字（带颜色渐变）
         System.out.println();
         String[] asciiArt = {
                 "  _____ _           _    _____ _      ____ ___ ",
@@ -59,8 +66,10 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a loading animation with rainbow colors.
+     */
     public static void loadingeffect() {
-        // 1. 动态彩虹边框
         System.out.print(BG_GRADIENT);
         for (int i = 0; i < 3; i++) {
             for (String color : RAINBOW) {
@@ -68,7 +77,7 @@ public class Ui {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
-                    // 恢复中断状态（重要！）
+                    // Restore interrupted status (important!)
                     Thread.currentThread().interrupt();
                     System.err.println("Sleep interrupted: " + e.getMessage());
                 }
@@ -77,9 +86,11 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a flashing warning message.
+     * @param message The warning message to display.
+     */
     public static void flashingeffect(String message) {
-        // 3. 闪烁警告框
-//         : RAINBOW[10]
         System.out.print(
                 RAINBOW[3] + BG_BLACK + BOLD + BLINK +
                         message + RESET
@@ -87,7 +98,7 @@ public class Ui {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            // 恢复中断状态（重要！）
+            // Restore interrupted status (important!)
             Thread.currentThread().interrupt();
             System.err.println("Sleep interrupted: " + e.getMessage());
         }
@@ -95,6 +106,10 @@ public class Ui {
         System.out.println();
     }
 
+    /**
+     * Displays a message in red color with blinking effect.
+     * @param message The message to display.
+     */
     public static void showRedColor(String message) {
         System.out.print(RAINBOW[0] + BG_BLACK + BOLD + BLINK +
                 message + RESET);

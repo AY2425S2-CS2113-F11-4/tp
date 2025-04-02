@@ -1,24 +1,7 @@
 //@@author felfelyuen
 package constants;
 
-import static constants.CommandConstants.ADD_CARD;
-import static constants.CommandConstants.DELETE_CARD;
-import static constants.CommandConstants.DELETE_DECK;
-import static constants.CommandConstants.EDIT_CARD;
-import static constants.CommandConstants.EXIT;
-import static constants.CommandConstants.INSERT_CODE;
-import static constants.CommandConstants.LIST_CARDS;
-import static constants.CommandConstants.MARK_LEARNED;
-import static constants.CommandConstants.MARK_UNLEARNED;
-import static constants.CommandConstants.NEW_DECK;
-import static constants.CommandConstants.QUIZ;
-import static constants.CommandConstants.RENAME_DECK;
-import static constants.CommandConstants.SEARCH_CARD;
-import static constants.CommandConstants.SWITCH_DECK;
-import static constants.CommandConstants.VIEW_ANS;
-import static constants.CommandConstants.VIEW_DECKS;
-import static constants.CommandConstants.VIEW_QN;
-import static constants.CommandConstants.VIEW_RESULTS;
+import static constants.CommandConstants.*;
 
 /**
  * class to store the user guide information
@@ -40,7 +23,7 @@ public class UserGuideMessages {
                     "\"" + MARK_LEARNED + "\": marks flashcard as learned\n" +
                     "\"" + MARK_UNLEARNED + "\": marks flashcard as unlearned\n" +
                     "\"" + QUIZ + "\": quizzes the unlearned flashcards\n" +
-                    "\"" + VIEW_RESULTS + "\": views results from quiz after quiz is completed\n" +
+                    "\"" + VIEW_RES + "\": views results from quiz after quiz is completed\n" +
                     "\"" + NEW_DECK + "\": creates a new deck of flashcards\n" +
                     "\"" + RENAME_DECK + "\": renames flashcard deck\n" +
                     "\"" + VIEW_DECKS + "\": shows list of decks\n" +
