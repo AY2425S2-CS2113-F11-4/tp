@@ -76,28 +76,28 @@ public class Parser {
         }
 
         return switch (command) {
-            case ADD_CARD -> new CommandCreate(arguments);
-            case VIEW_QN -> new CommandViewQuestion(arguments);
-            case VIEW_ANS -> new CommandViewAnswer(arguments);
-            case EDIT_CARD -> new CommandEdit(arguments);
-            case LIST_CARDS -> new CommandListQuestion();
-            case DELETE_CARD -> new CommandDelete(arguments);
-            case INSERT_CODE -> new CommandInsertCode(arguments);
-            case SEARCH_CARD -> new CommandSearchFlashcard(arguments);
+        case ADD_CARD -> new CommandCreate(arguments);
+        case VIEW_QN -> new CommandViewQuestion(arguments);
+        case VIEW_ANS -> new CommandViewAnswer(arguments);
+        case EDIT_CARD -> new CommandEdit(arguments);
+        case LIST_CARDS -> new CommandListQuestion();
+        case DELETE_CARD -> new CommandDelete(arguments);
+        case INSERT_CODE -> new CommandInsertCode(arguments);
+        case SEARCH_CARD -> new CommandSearchFlashcard(arguments);
 
-            case NEW_DECK -> new CommandCreateDeck(arguments);
-            case SWITCH_DECK -> new CommandSwitchDeck(arguments);
-            case RENAME_DECK -> new CommandRenameDeck(arguments);
-            case VIEW_DECKS -> new CommandViewDecks();
-            case DELETE_DECK -> handleDeleteDeckConfirmation(arguments);
+        case NEW_DECK -> new CommandCreateDeck(arguments);
+        case SWITCH_DECK -> new CommandSwitchDeck(arguments);
+        case RENAME_DECK -> new CommandRenameDeck(arguments);
+        case VIEW_DECKS -> new CommandViewDecks();
+        case DELETE_DECK -> handleDeleteDeckConfirmation(arguments);
 
-            case QUIZ -> new CommandQuizFlashcards();
-            case VIEW_RES -> new CommandViewQuizResult();
-            case MARK_UNLEARNED -> new CommandChangeLearned(arguments, false);
-            case MARK_LEARNED -> new CommandChangeLearned(arguments, true);
+        case QUIZ -> new CommandQuizFlashcards();
+        case VIEW_RES -> new CommandViewQuizResult();
+        case MARK_UNLEARNED -> new CommandChangeLearned(arguments, false);
+        case MARK_LEARNED -> new CommandChangeLearned(arguments, true);
 
-            case USER_GUIDE -> new CommandUserGuide();
-            default -> throw new FlashCLIArgumentException(POSSIBLE_COMMANDS);
+        case USER_GUIDE -> new CommandUserGuide();
+        default -> throw new FlashCLIArgumentException(POSSIBLE_COMMANDS);
         };
     }
 
