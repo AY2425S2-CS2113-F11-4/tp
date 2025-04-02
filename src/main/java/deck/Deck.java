@@ -37,7 +37,6 @@ import static constants.SuccessMessages.VIEW_ANSWER_SUCCESS;
 import static constants.SuccessMessages.VIEW_QUESTION_SUCCESS;
 import static constants.SuccessMessages.VIEW_QUIZRESULT_SUCCESS;
 import static constants.SuccessMessages.QUIZRESULT_FULL_MARKS;
-import static deck.DeckManager.currentDeck;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +71,6 @@ public class Deck {
     private Timer timer;
 
     private record Result(int questionStart, int answerStart) { }
-    private static ArrayList<Flashcard> queue = new ArrayList<>();
     private static boolean isQuizCompleted = false;
 
     /**
@@ -364,6 +362,7 @@ public class Deck {
 
         logger.info("Exiting quiz mode:");
         Ui.showToUser(String.format(QUIZ_END, timeTaken));
+        isQuizCompleted = true;
         return true;
     }
 
