@@ -2,7 +2,6 @@ package deck;
 
 import exceptions.EmptyListException;
 import exceptions.FlashCLIArgumentException;
-import exceptions.QuizCancelledException;
 
 import static constants.ErrorMessages.CHANGE_IS_LEARNED_MISSING_INDEX;
 import static constants.ErrorMessages.CREATE_INVALID_ORDER;
@@ -75,7 +74,6 @@ public class Deck {
     private record Result(int questionStart, int answerStart) { }
     private static ArrayList<Flashcard> queue = new ArrayList<>();
     private static boolean isQuizCompleted = false;
-
 
     /**
      * Creates a new deck with the specified name.
@@ -449,7 +447,9 @@ public class Deck {
         int incorrectFlashcardsSize = incorrectFlashcards.size();
         int totalQuestionsSize = queue.size();
 
-        if (incorrectAnswersSize != incorrectIndexesSize | incorrectAnswersSize != incorrectFlashcardsSize | incorrectIndexesSize != incorrectFlashcardsSize) {
+        if (incorrectAnswersSize != incorrectIndexesSize 
+            | incorrectAnswersSize != incorrectFlashcardsSize 
+            | incorrectIndexesSize != incorrectFlashcardsSize) {
             throw new FlashCLIArgumentException(MISMATCHED_ARRAYS);
         }
 
