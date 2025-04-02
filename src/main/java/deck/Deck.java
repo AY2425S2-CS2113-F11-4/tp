@@ -444,7 +444,7 @@ public class Deck {
         int incorrectAnswersSize = incorrectAnswers.size();
         int incorrectIndexesSize = incorrectIndexes.size();
         int incorrectFlashcardsSize = incorrectFlashcards.size();
-        int totalQuestionsSize = queue.size();
+        int totalQuestionsSize = flashcards.size();
 
         if (incorrectAnswersSize != incorrectIndexesSize 
             | incorrectAnswersSize != incorrectFlashcardsSize 
