@@ -1,10 +1,26 @@
-//@@author felfelyuen
 package constants;
 
-import static constants.CommandConstants.*;
+import static constants.CommandConstants.ADD_CARD;
+import static constants.CommandConstants.NEW_DECK;
+import static constants.CommandConstants.SWITCH_DECK;
+import static constants.CommandConstants.LIST_CARDS;
+import static constants.CommandConstants.VIEW_QN;
+import static constants.CommandConstants.VIEW_ANS;
+import static constants.CommandConstants.DELETE_CARD;
+import static constants.CommandConstants.EDIT_CARD;
+import static constants.CommandConstants.INSERT_CODE;
+import static constants.CommandConstants.MARK_LEARNED;
+import static constants.CommandConstants.MARK_UNLEARNED;
+import static constants.CommandConstants.QUIZ;
+import static constants.CommandConstants.VIEW_RES;
+import static constants.CommandConstants.RENAME_DECK;
+import static constants.CommandConstants.VIEW_DECKS;
+import static constants.CommandConstants.SEARCH_CARD;
+import static constants.CommandConstants.DELETE_DECK;
+import static constants.CommandConstants.EXIT;
 
 /**
- * class to store the user guide information
+ * Class to store the user guide information.
  */
 public class UserGuideMessages {
     public static final String USER_GUIDE_INFORMATION =
@@ -32,5 +48,4 @@ public class UserGuideMessages {
                     "\"" + DELETE_DECK + "\": deletes the deck\n" +
                     "\"" + EXIT + "\": exits the program\n\n" +
                     "Go to the flashCli User Guide website for more details";
-
 }

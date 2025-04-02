@@ -16,14 +16,9 @@ import java.io.IOException;
 
 public class FlashCLI {
 
-    private String user_input;
     /**
      * Main entry-point for the java.flashcli.FlashCLI application.
      */
-    public String getUserInput(){
-        return user_input;
-
-    }
     public static void main(String[] args) {
         Ui.showTitle();
         LoggingSetup.configureGlobalLogging();

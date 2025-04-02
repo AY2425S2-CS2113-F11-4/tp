@@ -7,6 +7,7 @@ import static constants.ColorConstants.BOLD;
 import static constants.ColorConstants.RAINBOW;
 import static constants.ColorConstants.RESET;
 import static constants.CommandConstants.EXIT;
+
 import java.util.Scanner;
 
 /**

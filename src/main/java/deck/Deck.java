@@ -491,26 +491,7 @@ public class Deck {
         }
     }
 
-    /**
-     * Give user another chance to take the quiz with only wrong answers from the last round, enhancing their understanding
-     *
-     */
-//    //@@author shunyang12
-//    public void ChooseToEnterAnotherRound() {
-//        Ui.showToUser("Enter another to have a second quiz reviewing only your wrong questions. enter any message to continue");
-//        String fullInputLine = Ui.getUserCommand();
-//        if(fullInputLine.equals(ANOTHER)) {
-//            try {
-//                quizFlashcards(false);;
-//            } catch (EmptyListException e) {
-//                Ui.showError(e.getMessage());
-//            } catch (QuizCancelledException e) {
-//                Ui.showToUser(e.getMessage());
-//            }
-//        } else {
-//            Ui.showToUser("Continue...");
-//        }
-//    }
+
     /**
      * Inserts code snippets to the flashcard
      *

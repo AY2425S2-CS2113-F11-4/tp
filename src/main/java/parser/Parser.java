@@ -75,7 +75,6 @@ public class Parser {
             throw new FlashCLIArgumentException(NO_DECK_ERROR);
         }
 
-
         return switch (command) {
             case ADD_CARD -> new CommandCreate(arguments);
             case VIEW_QN -> new CommandViewQuestion(arguments);
@@ -135,5 +134,4 @@ public class Parser {
     public static String parseCodeSnippet(String codeSnippet) {
         return codeSnippet;
     }
-
 }
