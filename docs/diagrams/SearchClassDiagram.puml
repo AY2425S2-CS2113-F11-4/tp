@@ -1,0 +1,26 @@
+@startuml
+class CommandSearchFlashcard {
+  - String arguments
+  + executeCommand()
+}
+
+class DeckManager {
+  + static Deck currentDeck
+  + static Map<String, Deck> decks
+  + static String globalSearch(String): String
+}
+
+class Deck {
+  + List<Flashcard> flashcards
+  + List<Flashcard> searchFlashcardQuestion(String): List<Flashcard>
+}
+
+class Flashcard {
+  + String question
+  + String answer
+}
+
+CommandSearchFlashcard --> DeckManager
+DeckManager --> Deck
+Deck --> Flashcard
+@enduml

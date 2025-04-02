@@ -1,0 +1,7 @@
+@startuml
+actor User
+User -> CommandDelete : executeCommand()
+CommandDelete -> Deck : deleteFlashcard(index)
+Deck -> CommandDelete : confirmation message
+CommandDelete -> Ui : showToUser(message)
+@enduml

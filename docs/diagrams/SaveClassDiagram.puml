@@ -1,0 +1,16 @@
+@startuml
+class Saving {
+  + saveAllDecks(Map<String, Deck>)
+}
+
+class Loading {
+  + loadAllDecks(): Map<String, Deck>
+}
+
+class DeckManager {
+  + static Map<String, Deck> decks
+}
+
+Saving --> DeckManager
+Loading --> DeckManager
+@enduml

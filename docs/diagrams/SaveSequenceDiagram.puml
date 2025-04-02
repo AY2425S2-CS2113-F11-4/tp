@@ -1,0 +1,11 @@
+@startuml
+actor User
+User -> FlashCLI : main()
+FlashCLI -> Loading : loadAllDecks()
+Loading -> FileSystem : read .txt files
+Loading -> Deck : create flashcards
+FlashCLI -> User : run session
+User -> FlashCLI : exit command
+FlashCLI -> Saving : saveAllDecks(decks)
+Saving -> FileSystem : write .txt files (overwrite + delete removed)
+@enduml

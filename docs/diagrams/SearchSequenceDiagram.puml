@@ -1,0 +1,14 @@
+@startuml
+actor User
+User -> CommandSearchFlashcard : executeCommand()
+alt Deck selected
+    CommandSearchFlashcard -> Deck : searchFlashcardQuestion(arguments)
+    Deck -> Deck : filter Flashcards
+    Deck -> CommandSearchFlashcard : result
+else No deck selected
+    CommandSearchFlashcard -> DeckManager : globalSearch(arguments)
+    DeckManager -> Deck : searchFlashcardQuestion(arguments) [loop over decks]
+    DeckManager -> CommandSearchFlashcard : result
+end
+CommandSearchFlashcard -> Ui : showToUser(result)
+@enduml

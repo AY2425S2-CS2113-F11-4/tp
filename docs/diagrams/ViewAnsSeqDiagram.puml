@@ -1,0 +1,7 @@
+@startuml
+actor User
+User -> CommandViewAnswer : executeCommand()
+CommandViewAnswer -> Deck : viewFlashcardAnswer(index)
+Deck -> CommandViewAnswer : answer string
+CommandViewAnswer -> Ui : showToUser(answer)
+@enduml

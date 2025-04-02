@@ -1,0 +1,12 @@
+@startuml
+class CommandViewAnswer {
+  - String arguments
+  + executeCommand()
+}
+
+class Deck {
+  + String viewFlashcardAnswer(int): String
+}
+
+CommandViewAnswer --> Deck
+@enduml
