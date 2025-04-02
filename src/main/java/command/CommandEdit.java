@@ -4,8 +4,8 @@ import exceptions.FlashCLIArgumentException;
 import ui.Ui;
 
 import static constants.ErrorMessages.EDIT_USAGE;
-import static constants.ErrorMessages.VIEW_INVALID_INDEX;
-import static constants.ErrorMessages.VIEW_OUT_OF_BOUNDS;
+import static constants.ErrorMessages.INVALID_INDEX_INPUT;
+import static constants.ErrorMessages.INDEX_OUT_OF_BOUNDS;
 import static deck.DeckManager.currentDeck;
 
 public class CommandEdit extends Command {
@@ -22,9 +22,9 @@ public class CommandEdit extends Command {
             int index = Integer.parseInt(arguments.split(" ", 2)[0]);
             Ui.showToUser(currentDeck.editFlashcard(index, arguments));
         } catch (ArrayIndexOutOfBoundsException e) {
-            Ui.showError(VIEW_OUT_OF_BOUNDS);
+            Ui.showError(INDEX_OUT_OF_BOUNDS);
         } catch (NumberFormatException e) {
-            Ui.showError(VIEW_INVALID_INDEX);
+            Ui.showError(INVALID_INDEX_INPUT);
         } catch (FlashCLIArgumentException e) {
             Ui.showError(e.getMessage());
             Ui.showError(EDIT_USAGE);

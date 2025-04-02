@@ -1,14 +1,19 @@
+//@@author Betahaxer
 package deck;
 
+import static constants.ErrorMessages.DELETE_EMPTY_DECK_ERROR;
 import static constants.ErrorMessages.DUPLICATE_DECK_NAME;
 import static constants.ErrorMessages.EMPTY_DECK_NAME;
 import static constants.ErrorMessages.MISSING_DECK_NAME;
 import static constants.ErrorMessages.NO_DECK_TO_SWITCH;
 import static constants.ErrorMessages.NO_DECK_TO_VIEW;
 import static constants.ErrorMessages.NO_SUCH_DECK;
+import static constants.ErrorMessages.SEARCH_RESULT_EMPTY;
 import static constants.ErrorMessages.UNCHANGED_DECK_NAME;
 import static constants.SuccessMessages.CREATE_DECK_SUCCESS;
+import static constants.SuccessMessages.DELETE_DECK_SUCCESS;
 import static constants.SuccessMessages.RENAME_DECK_SUCCESS;
+import static constants.SuccessMessages.SEARCH_SUCCESS;
 import static constants.SuccessMessages.SWITCH_DECK_SUCCESS;
 import static constants.SuccessMessages.VIEW_DECKS_SUCCESS;
 
@@ -16,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import exceptions.EmptyListException;
 import exceptions.FlashCLIArgumentException;
 
 /**
@@ -29,9 +35,8 @@ import exceptions.FlashCLIArgumentException;
  * <p>Throws {@code FlashCLIArgumentException} for invalid input conditions.</p>
  */
 
-//@@author Betahaxer
 public class DeckManager {
-    public static Deck currentDeck;
+    public static Deck currentDeck = null;
     public static LinkedHashMap<String, Deck> decks = new LinkedHashMap<>();
     private static final Logger logger = Logger.getLogger(DeckManager.class.getName());
 
@@ -160,16 +165,10 @@ public class DeckManager {
      */
     public static String switchDeck(String arguments) throws FlashCLIArgumentException {
         logger.info("Entering switchDeck method with arguments: " + arguments);
-
         String deckName = arguments.trim();
-
         if (decks.isEmpty()) {
             logger.warning("Attempted to switch decks, but no decks are available.");
             throw new FlashCLIArgumentException(NO_DECK_TO_SWITCH);
-        }
-        if (deckName.isEmpty()) {
-            logger.warning("Deck name is empty.");
-            throw new FlashCLIArgumentException(EMPTY_DECK_NAME);
         }
 
         if (!decks.containsKey(deckName)) {
@@ -186,5 +185,74 @@ public class DeckManager {
         logger.info("Deck switched successfully: " + currentDeck.getName());
         return String.format(SWITCH_DECK_SUCCESS, currentDeck.getName());
     }
-}
 
+    /**
+     * Deletes a deck by its name if the user has confirmed the deletion.
+     * Ensures that the deck exists before removal and updates the current deck if necessary.
+     *
+     * @param arguments the name of the deck to be deleted.
+     * @return a success message indicating that the deck has been deleted.
+     * @throws FlashCLIArgumentException if the deck list is empty, the deck name is missing,
+     *                                   or the specified deck does not exist.
+     */
+    public static String deleteDeck(String arguments) throws FlashCLIArgumentException {
+        String deckName = arguments.trim();
+        if (decks.isEmpty()) {
+            throw new FlashCLIArgumentException(DELETE_EMPTY_DECK_ERROR);
+        }
+        if (deckName.isEmpty()) {
+            throw new FlashCLIArgumentException(EMPTY_DECK_NAME);
+        }
+
+        // checks if selected deck is the one that will be deleted
+        if (currentDeck == decks.get(deckName)) {
+            currentDeck = null;
+        }
+
+        Deck deletedDeck = decks.remove(deckName);
+
+        if (deletedDeck == null) {
+            throw new FlashCLIArgumentException(NO_SUCH_DECK);
+        }
+
+        return String.format(DELETE_DECK_SUCCESS, deckName);
+    }
+
+    /**
+     * Searches for flashcards across all decks based on the provided question and/or answer arguments.
+     *
+     * @param arguments the search query in the format "q/QUESTION a/ANSWER"
+     * @return formatted string of matching flashcards with their respective decks
+     * @throws FlashCLIArgumentException if the search arguments are invalid
+     * @throws EmptyListException        if there are no decks to search in / if there is no matching flashcards
+     */
+    //@@author ManZ9802
+    public static String globalSearch(String arguments) throws FlashCLIArgumentException, EmptyListException {
+        if (decks.isEmpty()) {
+            throw new EmptyListException("No decks available for searching.");
+        }
+
+        StringBuilder result = new StringBuilder();
+        int matchCount = 0;
+
+        for (Map.Entry<String, Deck> deckEntry : decks.entrySet()) {
+            String deckName = deckEntry.getKey();
+            Deck deck = deckEntry.getValue();
+
+            for (Flashcard flashcard : deck.searchFlashcardHelper(arguments)) {
+                matchCount++;
+                result.append(String.format("Deck: %s\nQuestion: %s\nAnswer: %s\n\n",
+                        deckName,
+                        flashcard.getQuestion(),
+                        flashcard.getAnswer()));
+            }
+        }
+
+        if (matchCount == 0) {
+            throw new EmptyListException(SEARCH_RESULT_EMPTY);
+        }
+
+        return String.format(SEARCH_SUCCESS, result.toString().trim());
+    }
+
+}
