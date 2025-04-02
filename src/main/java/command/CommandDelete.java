@@ -21,6 +21,7 @@ public class CommandDelete extends Command{
     @Override
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             int index = Integer.parseInt(arguments);
             Ui.showToUser(currentDeck.deleteFlashcard(index));
         } catch (NumberFormatException e) {

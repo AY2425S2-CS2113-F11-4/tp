@@ -20,6 +20,7 @@ public class CommandViewQuestion extends Command{
      */
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             int index = Integer.parseInt(arguments);
             Ui.showToUser(currentDeck.viewFlashcardQuestion(index));
         } catch (ArrayIndexOutOfBoundsException e) {

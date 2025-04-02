@@ -16,6 +16,7 @@ public class CommandViewQuizResult extends Command{
     @Override
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             Ui.showToUser(currentDeck.showQuizResult());
         }  catch (FlashCLIArgumentException e) {
             Ui.showError(e.getMessage());

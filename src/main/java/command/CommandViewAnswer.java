@@ -21,6 +21,7 @@ public class CommandViewAnswer extends Command {
     @Override
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             int index = Integer.parseInt(arguments);
             Ui.showToUser(currentDeck.viewFlashcardAnswer(index));
         } catch (NumberFormatException e) {

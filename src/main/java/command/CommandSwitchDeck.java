@@ -25,6 +25,7 @@ public class CommandSwitchDeck extends Command {
      */
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             Ui.showToUser(switchDeck(arguments));
         } catch (FlashCLIArgumentException e) {
             Ui.showError(e.getMessage());

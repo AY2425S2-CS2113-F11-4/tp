@@ -20,6 +20,7 @@ public class CommandViewDecks extends Command {
      */
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             Ui.showToUser(viewDecks());
         } catch (FlashCLIArgumentException e) {
             Ui.showError(e.getMessage());

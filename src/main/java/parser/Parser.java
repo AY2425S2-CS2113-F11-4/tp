@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ui.Ui;
+import static ui.Ui.*;
+
 /**
  * Parses user input and returns the corresponding command.
  *
@@ -64,36 +67,23 @@ public class Parser {
             throw new FlashCLIArgumentException(NO_DECK_ERROR);
         }
 
-        switch (command) {
-            case CREATE:
-                return new CommandCreate(arguments);
-            case VIEW_QN:
-                return new CommandViewQuestion(arguments);
-            case VIEW_ANS:
-                return new CommandViewAnswer(arguments);
-            case EDIT:
-                return new CommandEdit(arguments);
-            case LIST:
-                return new CommandListQuestion();
-            case DELETE:
-                return new CommandDelete(arguments);
-            case NEW_DECK:
-                return new CommandCreateDeck(arguments);
-            case SWITCH_DECK:
-                return new CommandSwitchDeck(arguments);
-            case RENAME_DECK:
-                return new CommandRenameDeck(arguments);
-            case VIEW_DECKS:
-                return new CommandViewDecks();
-            case QUIZ:
-                return new CommandQuizFlashcards();
-            case VIEW_RES:
-                return new CommandViewQuizResult();
-            case INSERT_CODE:
-                return new CommandInsertCode(arguments);
-            default:
-                throw new FlashCLIArgumentException(POSSIBLE_COMMANDS);
-        }
+
+        return switch (command) {
+            case CREATE -> new CommandCreate(arguments);
+            case VIEW_QN -> new CommandViewQuestion(arguments);
+            case VIEW_ANS -> new CommandViewAnswer(arguments);
+            case EDIT -> new CommandEdit(arguments);
+            case LIST -> new CommandListQuestion();
+            case DELETE -> new CommandDelete(arguments);
+            case NEW_DECK -> new CommandCreateDeck(arguments);
+            case SWITCH_DECK -> new CommandSwitchDeck(arguments);
+            case RENAME_DECK -> new CommandRenameDeck(arguments);
+            case VIEW_DECKS -> new CommandViewDecks();
+            case QUIZ -> new CommandQuizFlashcards();
+            case VIEW_RES -> new CommandViewQuizResult();
+            case INSERT_CODE -> new CommandInsertCode(arguments);
+            default -> throw new FlashCLIArgumentException(POSSIBLE_COMMANDS);
+        };
     }
 
     /**

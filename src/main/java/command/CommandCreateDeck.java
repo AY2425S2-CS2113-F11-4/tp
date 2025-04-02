@@ -25,6 +25,7 @@ public class CommandCreateDeck extends Command{
      */
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             Ui.showToUser(createDeck(arguments));
         } catch (FlashCLIArgumentException e) {
             Ui.showError(e.getMessage());

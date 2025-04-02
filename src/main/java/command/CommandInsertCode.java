@@ -17,6 +17,7 @@ public class CommandInsertCode extends Command{
     @Override
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             int index = Integer.parseInt(arguments.split(" ", 2)[0]);
             String output = currentDeck.insertCodeSnippet(index, arguments);
             Ui.showToUser(output);

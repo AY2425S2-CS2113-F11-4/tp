@@ -1,6 +1,7 @@
 package flashcli;
 
 import static constants.CommandConstants.EXIT;
+import static constants.ColorConstants.*;
 
 import command.Command;
 import exceptions.FlashCLIArgumentException;
@@ -21,7 +22,7 @@ public class FlashCLI {
 
     }
     public static void main(String[] args) {
-        System.out.println("Welcome to FlashCLI!");
+        Ui.showTitle();
         LoggingSetup.configureGlobalLogging();
         String fullInputLine = getUserCommand();
 

@@ -18,6 +18,7 @@ public class CommandEdit extends Command {
     @Override
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             int index = Integer.parseInt(arguments.split(" ", 2)[0]);
             Ui.showToUser(currentDeck.editFlashcard(index, arguments));
         } catch (ArrayIndexOutOfBoundsException e) {

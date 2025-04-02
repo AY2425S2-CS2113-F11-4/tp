@@ -14,6 +14,7 @@ public class CommandListQuestion extends Command{
      */
     public void executeCommand() {
         try {
+            Ui.loadingeffect();
             String list = currentDeck.listFlashcards();
             Ui.showToUser(list);
         } catch (EmptyListException e) {
