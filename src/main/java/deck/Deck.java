@@ -62,6 +62,7 @@ import timer.Timer;
  */
 public class Deck {
 
+    private static boolean isQuizCompleted = false;
     private static final Logger logger = Logger.getLogger(Deck.class.getName());
     private String name;
     private ArrayList<Flashcard> flashcards = new ArrayList<>();
@@ -71,7 +72,6 @@ public class Deck {
     private Timer timer;
 
     private record Result(int questionStart, int answerStart) { }
-    private static boolean isQuizCompleted = false;
 
     /**
      * Creates a new deck with the specified name.
@@ -465,8 +465,6 @@ public class Deck {
 
         showMistakes();
 
-//        ChooseToEnterAnotherRound();
-
         return VIEW_QUIZRESULT_SUCCESS;
     }
 
@@ -490,46 +488,8 @@ public class Deck {
         }
     }
 
-
     /**
      * Inserts code snippets to the flashcard
-     *
-     * @param index     index of flashcard to insert code snippet
-     * @param arguments user inputs containing updated question and answer
-     * @return the updated flashcard in the format of EDIT_SUCCESS
-     * @throws ArrayIndexOutOfBoundsException if the index is outside of list size
-     */
-//    //@@author ElonKoh
-//    public String insertCodeSnippet(int index, String arguments)
-//            throws ArrayIndexOutOfBoundsException,
-//            FlashCLIArgumentException {
-//        boolean containsAllArguments = arguments.contains("/c");
-//        if (!containsAllArguments) {
-//            throw new FlashCLIArgumentException(INSERT_MISSING_FIELD);
-//        }
-//        int codeStart = arguments.indexOf("/c");
-//
-//        if (index <= 0 || index > flashcards.size()) {
-//            throw new ArrayIndexOutOfBoundsException(INDEX_OUT_OF_BOUNDS);
-//        }
-//        String codeSnippet = arguments.substring(codeStart + "/c".length()).trim();
-//        if (codeSnippet.isEmpty()) {
-//            throw new FlashCLIArgumentException(INSERT_MISSING_CODE);
-//        }
-//        String formattedCodeSnippet = Parser.parseCodeSnippet(codeSnippet);
-//
-//        int arrayIndex = index - 1;
-//        Flashcard insertFlashcard = flashcards.get(arrayIndex);
-//
-//        insertFlashcard.setCodeSnippet(formattedCodeSnippet);
-//        return String.format(INSERT_SUCCESS,
-//                insertFlashcard.getQuestion(), insertFlashcard.getAnswer(),
-//                formattedCodeSnippet);
-//    }
-
-    /**
-     * Inserts code snippets to the flashcard
-     *
      * @param index     index of flashcard to insert code snippet
      * @param arguments user inputs containing updated question and answer
      * @return the updated flashcard in the format of EDIT_SUCCESS
