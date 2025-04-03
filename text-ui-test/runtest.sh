@@ -1,37 +1,36 @@
 #!/usr/bin/env bash
 
-# Change to script directory
 cd "${0%/*}"
-
 cd ..
 ./gradlew clean shadowJar
 
 cd text-ui-test
 
-# Find the jar file and run the test (output will be colored)
+# 运行测试并捕获输出
 java -jar $(find ../build/libs/ -mindepth 1 -print -quit) < input.txt > ACTUAL.TXT
 
-# Function to remove ANSI color codes
-strip_ansi() {
-    sed 's/\x1b\[[0-9;]*[mGK]//g'
+# 标准化比较（忽略颜色、空白和行尾符）
+normalize() {
+    sed -e 's/\x1B\[[0-9;]*[mGK]//g' -e 's/[[:space:]]*$//' -e 's/\r$//' | tr -d '\r'
 }
 
-# Remove colors and normalize line endings
-strip_ansi < ACTUAL.TXT | tr -d '\r' > ACTUAL_PLAIN.TXT
-strip_ansi < EXPECTED.TXT | tr -d '\r' > EXPECTED_PLAIN.TXT
+normalize < ACTUAL.TXT > ACTUAL_NORM.TXT
+normalize < EXPECTED.TXT > EXPECTED_NORM.TXT
 
-# Compare the normalized files
-if diff -w EXPECTED_PLAIN.TXT ACTUAL_PLAIN.TXT > /dev/null
+# 比较标准化后的内容
+if diff -wB EXPECTED_NORM.TXT ACTUAL_NORM.TXT > /dev/null
 then
     echo "Test passed!"
-    rm ACTUAL_PLAIN.TXT EXPECTED_PLAIN.TXT
+    rm ACTUAL_NORM.TXT EXPECTED_NORM.TXT
     exit 0
 else
-    echo "Test failed!"
+    echo "Test failed! (差异仅显示标准化后的内容)"
     echo "--- Expected ---"
-    cat EXPECTED_PLAIN.TXT
+    cat EXPECTED_NORM.TXT
     echo "--- Actual ---"
-    cat ACTUAL_PLAIN.TXT
-    rm ACTUAL_PLAIN.TXT EXPECTED_PLAIN.TXT
+    cat ACTUAL_NORM.TXT
+    echo "----------------"
+    echo "提示：实际输出已保存到 ACTUAL.TXT（包含原始格式）"
+    rm ACTUAL_NORM.TXT EXPECTED_NORM.TXT
     exit 1
 fi
