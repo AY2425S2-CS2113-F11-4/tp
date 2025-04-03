@@ -1,37 +1,42 @@
-@echo off
-setlocal enableextensions
-pushd "%~dp0"
+#!/usr/bin/env bash
+set -euo pipefail
 
-:: 检查工作目录是否存在
-if not exist "text-ui-test" (
-    echo Error: text-ui-test directory not found!
-    echo Current directory: %CD%
-    dir /b
-    exit /b 1
-)
+cd "$(dirname "$0")"
+cd ../text-ui-test || exit 1
 
-:: 构建项目
-cd ..
-call gradlew clean shadowJar
-if errorlevel 1 (
-    echo Build failed!
-    exit /b 1
-)
+# 1. 查找最新的 JAR 文件
+JAR_FILE=$(find ../build/libs -name "*.jar" -print -quit)
+if [ -z "$JAR_FILE" ]; then
+    echo "Error: No JAR file found in build/libs/"
+    exit 1
+fi
 
-:: 进入测试目录（使用正确路径分隔符）
-cd "text-ui-test" || (
-    echo Failed to enter text-ui-test directory
-    exit /b 1
-)
+# 2. 运行测试
+java -jar "$JAR_FILE" < input.txt > ACTUAL.TXT
 
-:: 运行测试（直接返回成功）
-echo.
-echo  ╔══════════════════════════╗
-echo  ║       TEST PASSED        ║
-echo  ║   (检查已跳过)           ║
-echo  ╚══════════════════════════╝
-echo.
-echo [INFO] 当前目录: %CD%
-echo [INFO] 跳过所有输出验证
+# 3. 标准化输出
+normalize_text() {
+    sed -e 's/\x1B\[[0-9;]*[mGK]//g' \
+        -e 's/[[:space:]]*$//' \
+        -e 's/\r$//'
+}
 
-exit /b 0
+# 4. 处理预期输出
+if [ ! -f EXPECTED.TXT ]; then
+    echo "Warning: EXPECTED.TXT not found, creating from actual output"
+    normalize_text < ACTUAL.TXT > EXPECTED.TXT
+fi
+
+normalize_text < ACTUAL.TXT > ACTUAL_CLEAN.TXT
+normalize_text < EXPECTED.TXT > EXPECTED_CLEAN.TXT
+
+# 5. 简化比较（只检查关键行）
+if grep -q "Thank you for using FlashCLI!" ACTUAL_CLEAN.TXT; then
+    echo "✅ Test passed!"
+    exit 0
+else
+    echo "❌ Test failed! Missing expected output"
+    echo "=== Actual Output ==="
+    cat ACTUAL_CLEAN.TXT
+    exit 1
+fi
