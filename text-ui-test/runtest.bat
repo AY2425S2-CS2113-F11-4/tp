@@ -19,6 +19,11 @@ for /f "tokens=*" %%a in ('dir /b /o-d *.jar') do (
 echo No JAR file found in build\libs!
 exit /b 1
 
+@echo off
+setlocal enableextensions disabledelayedexpansion
+
+:: ... (前面部分保持不变直到 :jarfound) ...
+
 :jarfound
 java -jar "%jarloc%" < ..\..\text-ui-test\input.txt > ..\..\text-ui-test\ACTUAL_RAW.TXT
 if errorlevel 1 (
