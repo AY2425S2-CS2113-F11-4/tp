@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\main",
+    "\\src\\main\\java",
+    "\\src\\main\\java\\constants",
+    "\\src\\main\\java\\ui",
+    "\\src\\test",
+    "\\src\\test\\java",
+    "\\src\\test\\java\\deck",
+    "\\text-ui-test"
+  ],
+  "SelectedNode": "\\src\\main\\java\\ui\\Ui.java",
+  "PreviewInSolutionExplorer": false
+}
