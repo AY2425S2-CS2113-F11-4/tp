@@ -481,7 +481,8 @@ public class Deck {
                 throw new ArrayIndexOutOfBoundsException(INDEX_OUT_OF_BOUNDS);
             }
 
-            Ui.showToUser("FlashCard " + (indexIncorrect+1) + "-> question: " + flashcards.get(indexIncorrect).getQuestion() +
+            Ui.showToUser("FlashCard " + (indexIncorrect+1) +
+                    "-> question: " + flashcards.get(indexIncorrect).getQuestion() +
                     " correct answer: " + flashcards.get(indexIncorrect).getAnswer() + " Your answer: " +
                     incorrectAnswers.get(wrongAnswerCount));
             wrongAnswerCount++;
