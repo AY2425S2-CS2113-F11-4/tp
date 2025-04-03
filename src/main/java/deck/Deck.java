@@ -479,7 +479,7 @@ public class Deck {
     public void showMistakes() throws ArrayIndexOutOfBoundsException {
         int wrongAnswerCount = 0;
         for (Integer indexIncorrect: incorrectIndexes) {
-            if(indexIncorrect < 0 | indexIncorrect >= queue.size() ) {
+            if(indexIncorrect < 0 | indexIncorrect >= flashcards.size() ) {
                 throw new ArrayIndexOutOfBoundsException(INDEX_OUT_OF_BOUNDS);
             }
 
