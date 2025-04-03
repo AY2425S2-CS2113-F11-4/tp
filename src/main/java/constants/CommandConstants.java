@@ -4,6 +4,7 @@ package constants;
  * class to hold all the command constants
  */
 public class CommandConstants {
+
     // flashcard commands
     public static final String ADD_CARD = "add";
     public static final String VIEW_QN = "qn";
@@ -18,7 +19,7 @@ public class CommandConstants {
     public static final String QUIZ = "quiz";
     public static final String MARK_UNLEARNED = "mark_unlearned";
     public static final String MARK_LEARNED = "mark_learned";
-    public static final String VIEW_RESULTS = "results";
+    public static final String VIEW_RES = "view_res";
 
     // deck commands
     public static final String NEW_DECK = "new";

@@ -1,6 +1,6 @@
 package constants;
 
-import static constants.CommandConstants.VIEW_RESULTS;
+import static constants.CommandConstants.VIEW_RES;
 
 /**
  * Class to hold all messages related to quiz.
@@ -12,7 +12,7 @@ public class QuizMessages {
             "Cancelling the quiz would not save your results";
     public static final String QUIZ_END =
             "You finished the test! You took: %s seconds!\n" +
-            "Type " + VIEW_RESULTS + " to check your test result";
+            "Type " + VIEW_RES + " to check your test result";
     public static final String QUIZ_NO_ANSWER_DETECTED = "No answer detected. Input your answer again:";
     public static final String QUIZ_CANCEL = "exit_quiz";
     public static final String QUIZ_CANCEL_MESSAGE = "Quiz stopped! Exiting quiz...";

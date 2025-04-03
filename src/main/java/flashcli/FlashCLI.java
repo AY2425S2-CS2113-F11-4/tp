@@ -15,11 +15,12 @@ import static ui.Ui.getUserCommand;
 import java.io.IOException;
 
 public class FlashCLI {
+
     /**
      * Main entry-point for the java.flashcli.FlashCLI application.
      */
     public static void main(String[] args) {
-        System.out.println("Welcome to FlashCLI!");
+        Ui.showTitle();
         LoggingSetup.configureGlobalLogging();
         DeckManager.decks = Loading.loadAllDecks();
         String fullInputLine = getUserCommand();

@@ -1,6 +1,7 @@
 package ui;
 
 import static constants.CommandConstants.EXIT;
+
 import java.util.Scanner;
 
 /**
@@ -39,5 +40,22 @@ public class Ui {
      */
     public static void showError(String message) {
         System.out.println(message);
+    }
+
+    /**
+     * Displays the application title with rainbow-colored ASCII art.
+     */
+    public static void showTitle() {
+        String[] asciiArt = {
+            " ______   _          ____      _____     __    __     ______    _         _   ",
+            "|  ____| | |        / /\\ \\    /  ___|   |  |  |  |   /  ____/  | |       | |  ",
+            "| |__    | |       / /__\\ \\  |  (___    |  |__|  |   | |       | |       | |  ",
+            "|  __|   | |      |  ____  |  \\___  \\   |   __   |   | |       | |       | |  ",
+            "| |      | |____  | |    | | _____|  |  |  |  |  |   | |____   | |____   | |  ",
+            "|_|      |______|  \\_\\  /_/  \\______/   |__|  |__|   \\ ____/   |______|  |_|  "
+        };
+        for (String line : asciiArt) {
+            System.out.println(line);
+        }
     }
 }

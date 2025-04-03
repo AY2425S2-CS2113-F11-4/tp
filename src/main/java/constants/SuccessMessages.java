@@ -36,4 +36,6 @@ public class SuccessMessages {
 
     public static final String CHANGED_ISLEARNED_SUCCESS = "Changed flashcard number %s into %s";
     public static final String SEARCH_SUCCESS = "Flashcards matched: \n%s";
+    public static final String QUIZRESULT_FULL_MARKS = "Great job! You have answered all of questions correctly.";
+    public static final String VIEW_QUIZRESULT_SUCCESS = "This is the end of the test report.";
 }

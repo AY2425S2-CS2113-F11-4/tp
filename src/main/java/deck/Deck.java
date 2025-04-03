@@ -14,6 +14,8 @@ import static constants.ErrorMessages.INSERT_MISSING_FIELD;
 import static constants.ErrorMessages.SEARCH_EMPTY_DECK;
 import static constants.ErrorMessages.SEARCH_MISSING_FIELD;
 import static constants.ErrorMessages.SEARCH_RESULT_EMPTY;
+import static constants.ErrorMessages.INCOMPLETED_QUIZ;
+import static constants.ErrorMessages.MISMATCHED_ARRAYS;
 import static constants.QuizMessages.QUIZ_CANCEL;
 import static constants.QuizMessages.QUIZ_CANCEL_MESSAGE;
 import static constants.QuizMessages.QUIZ_CORRECT;
@@ -33,6 +35,8 @@ import static constants.SuccessMessages.LIST_SUCCESS;
 import static constants.SuccessMessages.SEARCH_SUCCESS;
 import static constants.SuccessMessages.VIEW_ANSWER_SUCCESS;
 import static constants.SuccessMessages.VIEW_QUESTION_SUCCESS;
+import static constants.SuccessMessages.VIEW_QUIZRESULT_SUCCESS;
+import static constants.SuccessMessages.QUIZRESULT_FULL_MARKS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +62,7 @@ import timer.Timer;
  */
 public class Deck {
 
+    private static boolean isQuizCompleted = false;
     private static final Logger logger = Logger.getLogger(Deck.class.getName());
     private String name;
     private ArrayList<Flashcard> flashcards = new ArrayList<>();
@@ -67,7 +72,6 @@ public class Deck {
     private Timer timer;
 
     private record Result(int questionStart, int answerStart) { }
-
 
     /**
      * Creates a new deck with the specified name.
@@ -358,6 +362,7 @@ public class Deck {
 
         logger.info("Exiting quiz mode:");
         Ui.showToUser(String.format(QUIZ_END, timeTaken));
+        isQuizCompleted = true;
         return true;
     }
 
@@ -402,6 +407,9 @@ public class Deck {
         assert (!userAnswer.isEmpty()) : "userAnswer should not be empty";
         if(userAnswer.equals(QUIZ_CANCEL)) {
             logger.info("Quiz cancelled by user. Exiting quiz:");
+            incorrectIndexes.clear();
+            incorrectFlashcards.clear();
+            incorrectAnswers.clear();
             throw new QuizCancelledException(QUIZ_CANCEL_MESSAGE);
         }
 
@@ -418,9 +426,70 @@ public class Deck {
         }
     }
 
+
+    /**
+     * Handles showing result upon the completion of a quiz
+     *
+     * @return a success message indicating the result has been shown.
+     * @throws  FlashCLIArgumentException if the quiz is not completed or mismatched arrays
+     */
+    //@@author shunyang12
+    public String showQuizResult() throws FlashCLIArgumentException {
+        logger.info("Trying to generate your quiz result...");
+
+        if (isQuizCompleted == false) {
+            throw new FlashCLIArgumentException(INCOMPLETED_QUIZ);
+        }
+
+        int incorrectAnswersSize = incorrectAnswers.size();
+        int incorrectIndexesSize = incorrectIndexes.size();
+        int incorrectFlashcardsSize = incorrectFlashcards.size();
+        int totalQuestionsSize = flashcards.size();
+
+        if (incorrectAnswersSize != incorrectIndexesSize 
+            | incorrectAnswersSize != incorrectFlashcardsSize 
+            | incorrectIndexesSize != incorrectFlashcardsSize) {
+            throw new FlashCLIArgumentException(MISMATCHED_ARRAYS);
+        }
+
+        Ui.showToUser("You have answered " + totalQuestionsSize + " questions in the quiz.");
+
+        if (incorrectAnswersSize == 0) {
+            return QUIZRESULT_FULL_MARKS;
+        }
+
+        Ui.showToUser("You got " + (totalQuestionsSize-incorrectAnswersSize) + " questions correctly.");
+        Ui.showToUser("You got " + incorrectAnswersSize + " questions incorrectly.");
+
+        Ui.showToUser("Review your mistakes: ");
+
+        showMistakes();
+
+        return VIEW_QUIZRESULT_SUCCESS;
+    }
+
+    /**
+     * Handles showing result upon the completion of a quiz
+     *
+     * @throws  FlashCLIArgumentException if the quiz is not completed or mismatched arrays
+     */
+    //@@author shunyang12
+    public void showMistakes() throws ArrayIndexOutOfBoundsException {
+        int wrongAnswerCount = 0;
+        for (Integer indexIncorrect: incorrectIndexes) {
+            if(indexIncorrect < 0 | indexIncorrect >= flashcards.size() ) {
+                throw new ArrayIndexOutOfBoundsException(INDEX_OUT_OF_BOUNDS);
+            }
+
+            Ui.showToUser("FlashCard " + (indexIncorrect+1) + "-> question: " + flashcards.get(indexIncorrect).getQuestion() +
+                    " correct answer: " + flashcards.get(indexIncorrect).getAnswer() + " Your answer: " +
+                    incorrectAnswers.get(wrongAnswerCount));
+            wrongAnswerCount++;
+        }
+    }
+
     /**
      * Inserts code snippets to the flashcard
-     *
      * @param index     index of flashcard to insert code snippet
      * @param arguments user inputs containing updated question and answer
      * @return the updated flashcard in the format of EDIT_SUCCESS

@@ -17,6 +17,7 @@ import command.CommandViewAnswer;
 import command.CommandViewDecks;
 import command.CommandViewQuestion;
 import command.CommandSearchFlashcard;
+import command.CommandViewQuizResult;
 import exceptions.FlashCLIArgumentException;
 import ui.Ui;
 
@@ -38,6 +39,7 @@ import static constants.CommandConstants.EDIT_CARD;
 import static constants.CommandConstants.LIST_CARDS;
 import static constants.CommandConstants.SEARCH_CARD;
 import static constants.ConfirmationMessages.CONFIRM_DELETE_DECK;
+import static constants.CommandConstants.VIEW_RES;
 import static constants.ErrorMessages.NO_DECK_ERROR;
 import static constants.ErrorMessages.POSSIBLE_COMMANDS;
 import static deck.DeckManager.currentDeck;
@@ -67,7 +69,7 @@ public class Parser {
         assert arguments != null : "Arguments should not be null";
 
         ArrayList<String> commandsWithDeck =
-                new ArrayList<>(List.of(ADD_CARD, VIEW_QN, VIEW_ANS, EDIT_CARD, LIST_CARDS, DELETE_CARD,
+                new ArrayList<>(List.of(ADD_CARD, VIEW_QN, VIEW_ANS, VIEW_RES, EDIT_CARD, LIST_CARDS, DELETE_CARD,
                         QUIZ, RENAME_DECK, INSERT_CODE));
         if (currentDeck == null && commandsWithDeck.contains(command)) {
             throw new FlashCLIArgumentException(NO_DECK_ERROR);
@@ -90,6 +92,7 @@ public class Parser {
         case DELETE_DECK -> handleDeleteDeckConfirmation(arguments);
 
         case QUIZ -> new CommandQuizFlashcards();
+        case VIEW_RES -> new CommandViewQuizResult();
         case MARK_UNLEARNED -> new CommandChangeLearned(arguments, false);
         case MARK_LEARNED -> new CommandChangeLearned(arguments, true);
 
@@ -131,5 +134,4 @@ public class Parser {
     public static String parseCodeSnippet(String codeSnippet) {
         return codeSnippet;
     }
-
 }
