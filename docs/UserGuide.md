@@ -112,7 +112,9 @@ Displays a list of all available decks.
 * **`decks`** → Lists all existing decks.
 
 ### **Delete a Deck: `remove`**
-Deletes the specified deck. This action is **permanent** and **cannot be undone**. You can view decks to delete using the `decks` command.
+Deletes the specified deck. There will be a confirmation before deletion to prevent accidental deletion. The user can also view decks to delete using the `decks` command.
+
+This action is **permanent** and **cannot be undone**. 
 
 **Format:** `remove INDEX`
 

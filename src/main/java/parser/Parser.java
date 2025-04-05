@@ -143,9 +143,9 @@ public class Parser {
         do {
             Ui.showToUser(String.format(CONFIRM_DELETE_DECK, arguments));
             userInput = Ui.getUserCommand().toLowerCase();
-            isValidConfirmation = userInput.equals("y") || userInput.equals("n");
+            isValidConfirmation = userInput.equals("yes") || userInput.equals("no");
         } while (!isValidConfirmation);
-        if (userInput.equals("n")) {
+        if (userInput.equals("no")) {
             return null;
         }
         return new CommandDeleteDeck(arguments);

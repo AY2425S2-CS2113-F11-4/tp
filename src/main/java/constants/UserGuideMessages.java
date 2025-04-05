@@ -44,8 +44,8 @@ public class UserGuideMessages {
                     "\"" + RENAME_DECK + "\": renames flashcard deck\n" +
                     "\"" + VIEW_DECKS + "\": shows list of decks\n" +
                     "\"" + SELECT_DECK + "\": selects deck of flashcards\n" +
-                    "\"" + SEARCH_CARD + "\": searches within a deck or globally\n" +
                     "\"" + REMOVE_DECK + "\": deletes the deck\n" +
+                    "\"" + SEARCH_CARD + "\": searches within a deck or globally\n" +
                     "\"" + EXIT + "\": exits the program\n\n" +
                     "Go to the flashCli User Guide website for more details";
 }
