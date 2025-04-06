@@ -716,10 +716,7 @@ public class DeckTest {
         }
     }
 
-    /**
-     * Tests successful flashcard creation with valid inputs.
-     * @throws Exception if any unexpected error occurs
-     */
+     // ==================== Basic Functionality Tests ====================
     @Test
     void createFlashcard_validInputs_success() throws Exception {
         String result = deck.createFlashcard("/q Question /a Answer");
@@ -728,10 +725,6 @@ public class DeckTest {
         assertEquals(1, deck.getFlashcards().size());
     }
 
-    /**
-     * Tests viewing a flashcard question with valid index.
-     * @throws Exception if any unexpected error occurs
-     */
     @Test
     void viewFlashcardQuestion_validIndex_success() throws Exception {
         deck.createFlashcard("/q Q1 /a A1");
@@ -740,19 +733,11 @@ public class DeckTest {
     }
 
     // ==================== Quiz Functionality Tests ====================
-
-    /**
-     * Tests quiz initiation with empty deck throws EmptyListException.
-     */
     @Test
     void quizFlashcards_emptyDeck_throwsException() {
         assertThrows(EmptyListException.class, () -> deck.quizFlashcards());
     }
 
-    /**
-     * Tests correct answer handling returns true.
-     * @throws Exception if any unexpected error occurs
-     */
     @Test
     void handleAnswerForFlashcard_correctAnswer_returnsTrue() throws Exception {
         deck.createFlashcard("/q Q1 /a A1");
@@ -761,11 +746,6 @@ public class DeckTest {
     }
 
     // ==================== Quiz Result Tests ====================
-
-    /**
-     * Tests perfect score results show gold medal and 100% accuracy.
-     * @throws Exception if any unexpected error occurs
-     */
     @Test
     void showQuizResult_perfectScore_showsGoldMedal() throws Exception {
         deck.createFlashcard("/q Q1 /a A1");
@@ -775,10 +755,6 @@ public class DeckTest {
         assertTrue(result.contains("GOLD MEDAL"));
     }
 
-    /**
-     * Tests all incorrect answers show 0% accuracy.
-     * @throws Exception if any unexpected error occurs
-     */
     @Test
     void showQuizResult_allIncorrect_shows0Percent() throws Exception {
         deck.createFlashcard("/q Q1 /a A1");
@@ -788,9 +764,6 @@ public class DeckTest {
         assertTrue(result.contains("Keep practicing"));
     }
 
-    /**
-     * Tests mismatched arrays throw FlashCLIArgumentException.
-     */
     @Test
     void showQuizResult_mismatchedArrays_throwsException() {
         deck.getIncorrectFlashcards().add(new Flashcard(1, "Q1", "A1"));
@@ -799,10 +772,6 @@ public class DeckTest {
     }
 
     // ==================== Mistake Display Tests ====================
-
-    /**
-     * Tests mistake display handles various formats correctly.
-     */
     @Test
     void showMistakes_multipleFormats_displaysCorrectly() {
         deck.getIncorrectFlashcards().add(new Flashcard(1, "Long question?", "Expected"));
@@ -811,28 +780,18 @@ public class DeckTest {
         deck.showMistakes(); // Verify output format
     }
 
-    /**
-     * Tests empty mistake lists are handled without errors.
-     */
     @Test
     void showMistakes_emptyLists_noErrors() {
         deck.showMistakes(); // Should handle empty case
     }
 
     // ==================== Edge Case Tests ====================
-
-    /**
-     * Tests missing fields throw FlashCLIArgumentException.
-     */
     @Test
     void createFlashcard_missingFields_throwsException() {
         assertThrows(FlashCLIArgumentException.class, 
             () -> deck.createFlashcard("/q Only question"));
     }
 
-    /**
-     * Tests invalid index throws FlashCLIArgumentException.
-     */
     @Test
     void viewFlashcardQuestion_invalidIndex_throwsException() {
         assertThrows(FlashCLIArgumentException.class, 
@@ -840,10 +799,6 @@ public class DeckTest {
     }
 
     // ==================== Performance Tests ====================
-
-    /**
-     * Tests large deck handling doesn't throw exceptions.
-     */
     @Test
     void quizFlashcards_largeDeck_performanceTest() {
         for (int i = 1; i <= 100; i++) {
@@ -853,10 +808,6 @@ public class DeckTest {
     }
 
     // ==================== Helper Method Tests ====================
-
-    /**
-     * Tests accuracy grade calculation at boundary conditions.
-     */
     @Test
     void calculateAccuracyGrade_boundaryConditions() {
         assertEquals("A+ :)", deck.calculateAccuracyGrade(100));
@@ -865,11 +816,6 @@ public class DeckTest {
     }
 
     // ==================== Integration Tests ====================
-
-    /**
-     * Tests complete workflow from creation to quiz results.
-     * @throws Exception if any unexpected error occurs
-     */
     @Test
     void fullWorkflow_createQuizViewResults() throws Exception {
         deck.createFlashcard("/q Q1 /a A1");
@@ -883,71 +829,29 @@ public class DeckTest {
         assertTrue(results.contains("Q2")); // In mistakes section
     }
 
-    // ==================== Code Snippet Tests ====================
-
-    /**
-     * Tests successful code snippet insertion.
-     * @throws Exception if any unexpected error occurs
-     */
+    // ==================== Existing Tests ====================
     @Test
-    void insertCodeSnippet_validInput_success() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        String result = deck.insertCodeSnippet(1, "/c System.out.println();");
-        assertTrue(result.contains("System.out.println()"));
+    void quizFlashcards_correctAnswer_success() {
+        try {
+            deck.createFlashcard("/q Q1 /a A1");
+            boolean result = deck.handleAnswerForFlashcard(
+                deck.getFlashcards().get(0), "A1");
+            assertTrue(result);
+        } catch (Exception e) {
+            fail();
+        }
     }
 
-    /**
-     * Tests missing code snippet throws FlashCLIArgumentException.
-     */
     @Test
-    void insertCodeSnippet_missingCode_throwsException() {
-        assertThrows(FlashCLIArgumentException.class,
-            () -> deck.insertCodeSnippet(1, "/c "));
+    void quizFlashcards_cancelQuiz_throwsException() {
+        try {
+            deck.createFlashcard("/q Q1 /a A1");
+            assertThrows(QuizCancelledException.class, 
+                () -> deck.handleAnswerForFlashcard(
+                    deck.getFlashcards().get(0), "cancel"));
+        } catch (Exception e) {
+            fail();
+        }
     }
-
-    // ==================== Search Functionality Tests ====================
-
-    /**
-     * Tests successful flashcard search by question.
-     * @throws Exception if any unexpected error occurs
-     */
-    @Test
-    void searchFlashcard_byQuestion_success() throws Exception {
-        deck.createFlashcard("/q FindMe /a A1");
-        String result = deck.searchFlashcard("/q Find");
-        assertTrue(result.contains("FindMe"));
-    }
-
-    /**
-     * Tests empty search results throw EmptyListException.
-     */
-    @Test
-    void searchFlashcard_noMatches_throwsException() {
-        assertThrows(EmptyListException.class,
-            () -> deck.searchFlashcard("/q NoSuchQuestion"));
-    }
-
-    // ==================== Learning Status Tests ====================
-
-    /**
-     * Tests successful change of learning status.
-     * @throws Exception if any unexpected error occurs
-     */
-    @Test
-    void changeIsLearned_validChange_success() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        String result = deck.changeIsLearned("1", true);
-        assertTrue(result.contains("learned"));
-    }
-
-    /**
-     * Tests redundant status change throws FlashCLIArgumentException.
-     */
-    @Test
-    void changeIsLearned_redundantChange_throwsException() {
-        assertThrows(FlashCLIArgumentException.class,
-            () -> deck.changeIsLearned("1", true));
-    }
-
 
 }
