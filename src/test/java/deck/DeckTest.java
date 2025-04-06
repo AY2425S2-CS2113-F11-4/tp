@@ -716,142 +716,235 @@ public class DeckTest {
         }
     }
 
-     // ==================== Basic Functionality Tests ====================
+    /**
+     * Tests successful deck creation with valid name.
+     * @throws Exception if any unexpected error occurs
+     */
     @Test
-    void createFlashcard_validInputs_success() throws Exception {
-        String result = deck.createFlashcard("/q Question /a Answer");
+    void createDeck_validName_success() throws Exception {
+        String result = DeckManager.createDeck(TEST_DECK_1);
+        assertTrue(result.contains(TEST_DECK_1));
+        assertEquals(1, DeckManager.getDeckSize());
+    }
+
+    /**
+     * Tests deck creation with empty name throws FlashCLIArgumentException.
+     */
+    @Test
+    void createDeck_emptyName_throwsException() {
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> DeckManager.createDeck(""));
+    }
+
+    /**
+     * Tests duplicate deck name throws FlashCLIArgumentException.
+     */
+    @Test
+    void createDeck_duplicateName_throwsException() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> DeckManager.createDeck(TEST_DECK_1));
+    }
+
+    // ==================== Deck Renaming Tests ====================
+
+    /**
+     * Tests successful deck renaming.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void renameDeck_validNewName_success() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        DeckManager.currentDeck = DeckManager.decks.get(TEST_DECK_1);
+        String result = DeckManager.renameDeck("NewName");
+        assertTrue(result.contains("NewName"));
+        assertFalse(DeckManager.decks.containsKey(TEST_DECK_1));
+    }
+
+    /**
+     * Tests renaming to same name throws FlashCLIArgumentException.
+     */
+    @Test
+    void renameDeck_sameName_throwsException() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        DeckManager.currentDeck = DeckManager.decks.get(TEST_DECK_1);
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> DeckManager.renameDeck(TEST_DECK_1));
+    }
+
+    // ==================== Deck Viewing Tests ====================
+
+    /**
+     * Tests viewing decks returns correct formatted list.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void viewDecks_withDecks_success() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        DeckManager.createDeck(TEST_DECK_2);
+        String result = DeckManager.viewDecks("");
+        assertTrue(result.contains(TEST_DECK_1));
+        assertTrue(result.contains(TEST_DECK_2));
+    }
+
+    /**
+     * Tests viewing empty deck list throws FlashCLIArgumentException.
+     */
+    @Test
+    void viewDecks_emptyList_throwsException() {
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> DeckManager.viewDecks(""));
+    }
+
+    // ==================== Deck Selection Tests ====================
+
+    /**
+     * Tests successful deck selection by index.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void selectDeck_validIndex_success() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        String result = DeckManager.selectDeck("1");
+        assertTrue(result.contains(TEST_DECK_1));
+        assertNotNull(DeckManager.currentDeck);
+    }
+
+    /**
+     * Tests selecting deck with invalid index throws FlashCLIArgumentException.
+     */
+    @Test
+    void selectDeck_invalidIndex_throwsException() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> DeckManager.selectDeck("2"));
+    }
+
+    // ==================== Deck Deletion Tests ====================
+
+    /**
+     * Tests successful deck deletion.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void deleteDeck_validIndex_success() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        String result = DeckManager.deleteDeck(0);
+        assertTrue(result.contains(TEST_DECK_1));
+        assertEquals(0, DeckManager.getDeckSize());
+    }
+
+    /**
+     * Tests deleting current deck clears current selection.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void deleteDeck_currentDeck_clearsSelection() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        DeckManager.currentDeck = DeckManager.decks.get(TEST_DECK_1);
+        DeckManager.deleteDeck(0);
+        assertNull(DeckManager.currentDeck);
+    }
+
+    // ==================== Deck Unselection Tests ====================
+
+    /**
+     * Tests successful deck unselection.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void unselectDeck_withCurrentDeck_success() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        DeckManager.currentDeck = DeckManager.decks.get(TEST_DECK_1);
+        String result = DeckManager.unselectDeck("");
+        assertTrue(result.contains(TEST_DECK_1));
+        assertNull(DeckManager.currentDeck);
+    }
+
+    /**
+     * Tests unselecting when no current deck throws FlashCLIArgumentException.
+     */
+    @Test
+    void unselectDeck_noCurrentDeck_throwsException() {
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> DeckManager.unselectDeck(""));
+    }
+
+    // ==================== Global Search Tests ====================
+
+    /**
+     * Tests global search finds matching flashcards.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void globalSearch_withMatches_success() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        Deck deck = DeckManager.decks.get(TEST_DECK_1);
+        deck.createFlashcard("/q Question /a Answer");
+        
+        String result = DeckManager.globalSearch("/q Question");
         assertTrue(result.contains("Question"));
-        assertTrue(result.contains("Answer"));
-        assertEquals(1, deck.getFlashcards().size());
+        assertTrue(result.contains(TEST_DECK_1));
     }
 
+    /**
+     * Tests global search with no matches throws EmptyListException.
+     */
     @Test
-    void viewFlashcardQuestion_validIndex_success() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        String result = deck.viewFlashcardQuestion("1");
-        assertTrue(result.contains("Q1"));
-    }
-
-    // ==================== Quiz Functionality Tests ====================
-    @Test
-    void quizFlashcards_emptyDeck_throwsException() {
-        assertThrows(EmptyListException.class, () -> deck.quizFlashcards());
-    }
-
-    @Test
-    void handleAnswerForFlashcard_correctAnswer_returnsTrue() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        boolean result = deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "A1");
-        assertTrue(result);
-    }
-
-    // ==================== Quiz Result Tests ====================
-    @Test
-    void showQuizResult_perfectScore_showsGoldMedal() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "A1");
-        String result = deck.showQuizResult();
-        assertTrue(result.contains("100.00%"));
-        assertTrue(result.contains("GOLD MEDAL"));
-    }
-
-    @Test
-    void showQuizResult_allIncorrect_shows0Percent() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "Wrong");
-        String result = deck.showQuizResult();
-        assertTrue(result.contains("0.00%"));
-        assertTrue(result.contains("Keep practicing"));
-    }
-
-    @Test
-    void showQuizResult_mismatchedArrays_throwsException() {
-        deck.getIncorrectFlashcards().add(new Flashcard(1, "Q1", "A1"));
-        deck.getIncorrectIndexes().add(1); // Mismatched index
-        assertThrows(FlashCLIArgumentException.class, () -> deck.showQuizResult());
-    }
-
-    // ==================== Mistake Display Tests ====================
-    @Test
-    void showMistakes_multipleFormats_displaysCorrectly() {
-        deck.getIncorrectFlashcards().add(new Flashcard(1, "Long question?", "Expected"));
-        deck.getIncorrectIndexes().add(0);
-        deck.getIncorrectAnswers().add("User answer");
-        deck.showMistakes(); // Verify output format
-    }
-
-    @Test
-    void showMistakes_emptyLists_noErrors() {
-        deck.showMistakes(); // Should handle empty case
+    void globalSearch_noMatches_throwsException() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
+        assertThrows(EmptyListException.class, 
+            () -> DeckManager.globalSearch("/q NoMatch"));
     }
 
     // ==================== Edge Case Tests ====================
-    @Test
-    void createFlashcard_missingFields_throwsException() {
-        assertThrows(FlashCLIArgumentException.class, 
-            () -> deck.createFlashcard("/q Only question"));
-    }
 
+    /**
+     * Tests index validation with various inputs.
+     */
     @Test
-    void viewFlashcardQuestion_invalidIndex_throwsException() {
-        assertThrows(FlashCLIArgumentException.class, 
-            () -> deck.viewFlashcardQuestion("999"));
-    }
-
-    // ==================== Performance Tests ====================
-    @Test
-    void quizFlashcards_largeDeck_performanceTest() {
-        for (int i = 1; i <= 100; i++) {
-            deck.insertFlashcard(new Flashcard(i, "Q"+i, "A"+i));
-        }
-        assertDoesNotThrow(() -> deck.quizFlashcards());
-    }
-
-    // ==================== Helper Method Tests ====================
-    @Test
-    void calculateAccuracyGrade_boundaryConditions() {
-        assertEquals("A+ :)", deck.calculateAccuracyGrade(100));
-        assertEquals("A :>", deck.calculateAccuracyGrade(87));
-        assertEquals("F ;(", deck.calculateAccuracyGrade(30));
-    }
-
-    // ==================== Integration Tests ====================
-    @Test
-    void fullWorkflow_createQuizViewResults() throws Exception {
-        deck.createFlashcard("/q Q1 /a A1");
-        deck.createFlashcard("/q Q2 /a A2");
+    void checkAndGetListIndex_variousInputs() throws Exception {
+        DeckManager.createDeck(TEST_DECK_1);
         
-        deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "A1");
-        deck.handleAnswerForFlashcard(deck.getFlashcards().get(1), "Wrong");
+        // Valid index
+        assertEquals(0, DeckManager.checkAndGetListIndex("1"));
         
-        String results = deck.showQuizResult();
-        assertTrue(results.contains("50.00%"));
-        assertTrue(results.contains("Q2")); // In mistakes section
+        // Invalid inputs
+        assertThrows(FlashCLIArgumentException.class,
+            () -> DeckManager.checkAndGetListIndex("0"));
+        assertThrows(FlashCLIArgumentException.class,
+            () -> DeckManager.checkAndGetListIndex("abc"));
+        assertThrows(FlashCLIArgumentException.class,
+            () -> DeckManager.checkAndGetListIndex(""));
     }
 
-    // ==================== Existing Tests ====================
+    /**
+     * Tests deck operations maintain consistent state.
+     * @throws Exception if any unexpected error occurs
+     */
     @Test
-    void quizFlashcards_correctAnswer_success() {
-        try {
-            deck.createFlashcard("/q Q1 /a A1");
-            boolean result = deck.handleAnswerForFlashcard(
-                deck.getFlashcards().get(0), "A1");
-            assertTrue(result);
-        } catch (Exception e) {
-            fail();
-        }
-    }
+    void deckOperations_maintainConsistentState() throws Exception {
+        // Create two decks
+        DeckManager.createDeck(TEST_DECK_1);
+        DeckManager.createDeck(TEST_DECK_2);
+        assertEquals(2, DeckManager.getDeckSize());
 
-    @Test
-    void quizFlashcards_cancelQuiz_throwsException() {
-        try {
-            deck.createFlashcard("/q Q1 /a A1");
-            assertThrows(QuizCancelledException.class, 
-                () -> deck.handleAnswerForFlashcard(
-                    deck.getFlashcards().get(0), "cancel"));
-        } catch (Exception e) {
-            fail();
-        }
+        // Select first deck
+        DeckManager.selectDeck("1");
+        assertNotNull(DeckManager.currentDeck);
+
+        // Rename current deck
+        DeckManager.renameDeck("RenamedDeck");
+        assertEquals(2, DeckManager.getDeckSize());
+        assertNotNull(DeckManager.currentDeck);
+
+        // Delete second deck
+        DeckManager.deleteDeck(1);
+        assertEquals(1, DeckManager.getDeckSize());
+
+        // Verify operations maintained consistency
+        assertTrue(DeckManager.decks.containsKey("RenamedDeck"));
+        assertEquals("RenamedDeck", DeckManager.currentDeck.getName());
     }
 
 }
