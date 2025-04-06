@@ -44,6 +44,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+ public static final String TEST_DECK_1 = "TestDeck1";
+ public static final String TEST_DECK_2 = "TestDeck2";
+
 public class DeckTest {
     private Deck deck;
 
