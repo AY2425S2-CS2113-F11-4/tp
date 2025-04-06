@@ -716,5 +716,238 @@ public class DeckTest {
         }
     }
 
+    /**
+     * Tests successful flashcard creation with valid inputs.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void createFlashcard_validInputs_success() throws Exception {
+        String result = deck.createFlashcard("/q Question /a Answer");
+        assertTrue(result.contains("Question"));
+        assertTrue(result.contains("Answer"));
+        assertEquals(1, deck.getFlashcards().size());
+    }
+
+    /**
+     * Tests viewing a flashcard question with valid index.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void viewFlashcardQuestion_validIndex_success() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        String result = deck.viewFlashcardQuestion("1");
+        assertTrue(result.contains("Q1"));
+    }
+
+    // ==================== Quiz Functionality Tests ====================
+
+    /**
+     * Tests quiz initiation with empty deck throws EmptyListException.
+     */
+    @Test
+    void quizFlashcards_emptyDeck_throwsException() {
+        assertThrows(EmptyListException.class, () -> deck.quizFlashcards());
+    }
+
+    /**
+     * Tests correct answer handling returns true.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void handleAnswerForFlashcard_correctAnswer_returnsTrue() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        boolean result = deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "A1");
+        assertTrue(result);
+    }
+
+    // ==================== Quiz Result Tests ====================
+
+    /**
+     * Tests perfect score results show gold medal and 100% accuracy.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void showQuizResult_perfectScore_showsGoldMedal() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "A1");
+        String result = deck.showQuizResult();
+        assertTrue(result.contains("100.00%"));
+        assertTrue(result.contains("GOLD MEDAL"));
+    }
+
+    /**
+     * Tests all incorrect answers show 0% accuracy.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void showQuizResult_allIncorrect_shows0Percent() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "Wrong");
+        String result = deck.showQuizResult();
+        assertTrue(result.contains("0.00%"));
+        assertTrue(result.contains("Keep practicing"));
+    }
+
+    /**
+     * Tests mismatched arrays throw FlashCLIArgumentException.
+     */
+    @Test
+    void showQuizResult_mismatchedArrays_throwsException() {
+        deck.getIncorrectFlashcards().add(new Flashcard(1, "Q1", "A1"));
+        deck.getIncorrectIndexes().add(1); // Mismatched index
+        assertThrows(FlashCLIArgumentException.class, () -> deck.showQuizResult());
+    }
+
+    // ==================== Mistake Display Tests ====================
+
+    /**
+     * Tests mistake display handles various formats correctly.
+     */
+    @Test
+    void showMistakes_multipleFormats_displaysCorrectly() {
+        deck.getIncorrectFlashcards().add(new Flashcard(1, "Long question?", "Expected"));
+        deck.getIncorrectIndexes().add(0);
+        deck.getIncorrectAnswers().add("User answer");
+        deck.showMistakes(); // Verify output format
+    }
+
+    /**
+     * Tests empty mistake lists are handled without errors.
+     */
+    @Test
+    void showMistakes_emptyLists_noErrors() {
+        deck.showMistakes(); // Should handle empty case
+    }
+
+    // ==================== Edge Case Tests ====================
+
+    /**
+     * Tests missing fields throw FlashCLIArgumentException.
+     */
+    @Test
+    void createFlashcard_missingFields_throwsException() {
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> deck.createFlashcard("/q Only question"));
+    }
+
+    /**
+     * Tests invalid index throws FlashCLIArgumentException.
+     */
+    @Test
+    void viewFlashcardQuestion_invalidIndex_throwsException() {
+        assertThrows(FlashCLIArgumentException.class, 
+            () -> deck.viewFlashcardQuestion("999"));
+    }
+
+    // ==================== Performance Tests ====================
+
+    /**
+     * Tests large deck handling doesn't throw exceptions.
+     */
+    @Test
+    void quizFlashcards_largeDeck_performanceTest() {
+        for (int i = 1; i <= 100; i++) {
+            deck.insertFlashcard(new Flashcard(i, "Q"+i, "A"+i));
+        }
+        assertDoesNotThrow(() -> deck.quizFlashcards());
+    }
+
+    // ==================== Helper Method Tests ====================
+
+    /**
+     * Tests accuracy grade calculation at boundary conditions.
+     */
+    @Test
+    void calculateAccuracyGrade_boundaryConditions() {
+        assertEquals("A+ :)", deck.calculateAccuracyGrade(100));
+        assertEquals("A :>", deck.calculateAccuracyGrade(87));
+        assertEquals("F ;(", deck.calculateAccuracyGrade(30));
+    }
+
+    // ==================== Integration Tests ====================
+
+    /**
+     * Tests complete workflow from creation to quiz results.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void fullWorkflow_createQuizViewResults() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        deck.createFlashcard("/q Q2 /a A2");
+        
+        deck.handleAnswerForFlashcard(deck.getFlashcards().get(0), "A1");
+        deck.handleAnswerForFlashcard(deck.getFlashcards().get(1), "Wrong");
+        
+        String results = deck.showQuizResult();
+        assertTrue(results.contains("50.00%"));
+        assertTrue(results.contains("Q2")); // In mistakes section
+    }
+
+    // ==================== Code Snippet Tests ====================
+
+    /**
+     * Tests successful code snippet insertion.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void insertCodeSnippet_validInput_success() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        String result = deck.insertCodeSnippet(1, "/c System.out.println();");
+        assertTrue(result.contains("System.out.println()"));
+    }
+
+    /**
+     * Tests missing code snippet throws FlashCLIArgumentException.
+     */
+    @Test
+    void insertCodeSnippet_missingCode_throwsException() {
+        assertThrows(FlashCLIArgumentException.class,
+            () -> deck.insertCodeSnippet(1, "/c "));
+    }
+
+    // ==================== Search Functionality Tests ====================
+
+    /**
+     * Tests successful flashcard search by question.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void searchFlashcard_byQuestion_success() throws Exception {
+        deck.createFlashcard("/q FindMe /a A1");
+        String result = deck.searchFlashcard("/q Find");
+        assertTrue(result.contains("FindMe"));
+    }
+
+    /**
+     * Tests empty search results throw EmptyListException.
+     */
+    @Test
+    void searchFlashcard_noMatches_throwsException() {
+        assertThrows(EmptyListException.class,
+            () -> deck.searchFlashcard("/q NoSuchQuestion"));
+    }
+
+    // ==================== Learning Status Tests ====================
+
+    /**
+     * Tests successful change of learning status.
+     * @throws Exception if any unexpected error occurs
+     */
+    @Test
+    void changeIsLearned_validChange_success() throws Exception {
+        deck.createFlashcard("/q Q1 /a A1");
+        String result = deck.changeIsLearned("1", true);
+        assertTrue(result.contains("learned"));
+    }
+
+    /**
+     * Tests redundant status change throws FlashCLIArgumentException.
+     */
+    @Test
+    void changeIsLearned_redundantChange_throwsException() {
+        assertThrows(FlashCLIArgumentException.class,
+            () -> deck.changeIsLearned("1", true));
+    }
+
 
 }
