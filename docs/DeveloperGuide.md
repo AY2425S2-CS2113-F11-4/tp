@@ -677,7 +677,7 @@ This design enables detailed post-quiz analysis while maintaining data consisten
 
 #### Sequence Diagram
 
-![](images/QuizresultSequence.png)
+![](images/QuizResultSequence.png)
 
 #### Key operations:
 
