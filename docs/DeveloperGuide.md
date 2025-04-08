@@ -363,11 +363,17 @@ After the quiz is finished, the user would be shown how long he took, and an opt
 - If the quiz is cancelled midway through (through exit_quiz) → throws `QuizCancelledException`
 - Empty answer inputted → the system would wait again for the user to input any answer.
 
+#### Why is it implemented this way?
+- The function quizFlashcards() has two other methods, handleQuestionForQuiz() and handleAnswerForFlashcard(), for simpler handling of the quiz. 
+- By breaking up the method, long methods are avoided, and the code is easier to debug as each method's accuracy can be verified separately. 
+- The methods being split up also allows handleQuestionForQuiz and handleAnswerForFlashcard to be implemented more abstractly, allowing future quiz methods to utilise them as well.
+
 #### Future updates:
 - Mass quiz mode: (quiz through all unlearned flashcards)
 - Endless mode: (continuously quizzing, stops when there are 3 mistakes)
 - Against the clock mod: (quiz must be done by a certain timing)
 
+---
 ### 3.2. Deck features
 ### 3.2.1. Creating a New Deck
 
