@@ -12,12 +12,14 @@ loop [flashcards.size()]
     return
     Deck -> Deck++: handleAnswer
     return
-    Deck -> Ui++ : showToUser(correct? statement)
+    Deck -> Timer: get the time taken for question
+    Timer --> Deck
+    Deck -> Ui++ : showToUser( correct? statement + time taken for question)
     return
     return
     end
 end
-return duration
+return total duration
 
 Deck -> Ui++ : showToUser(quiz ended + duration)
 return
