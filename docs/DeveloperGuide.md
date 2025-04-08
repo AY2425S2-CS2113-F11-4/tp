@@ -167,7 +167,7 @@ This feature enables the user to edit the question and answer to a specific flas
 
 #### Design
 
-The delete flashcard feature allows users to remove a specific flashcard from the currently selected deck based on index. The system validates the index and ensures it’s within bounds.
+The delete flashcard feature allow users to remove a specific flashcard from the currently selected deck based on index. The system validates the index and ensures it’s within bounds.
 
 #### Class Diagram
 
