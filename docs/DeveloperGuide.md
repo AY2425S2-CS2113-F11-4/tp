@@ -333,7 +333,7 @@ Allows the user to mark the flashcard as learned or unlearned, by supplying the 
 This feature allows the user to enter a timed quiz mode, by asking only the unlearned flashcards. It assumes that the user has already selected a desk.
 
 In timed quiz mode, the flashcard's question would appear and wait for the user's input answer. If the answer is correct, the user is shown "Correct!", and if it is answered incorrectly, the user is shown "Incorrect.". Afterwards, the user would proceed to the next question.
-At the start of the quiz mode, a timer object is instantiated, and its duration would be retrieved after quiz mode ends.
+At the start of the quiz mode, a timer object is instantiated. The duration after each question is shown, and its total duration would be shown after quiz mode ends.
 If the question is answered correctly, the flashcard would be mark as learned, otherwise, its isLearned value remains the same.
 After the quiz is finished, the user would be shown how long he took, and an option to view results (`view_res`).
 
@@ -345,6 +345,7 @@ After the quiz is finished, the user would be shown how long he took, and an opt
 
 ![](images/QuizSequenceDiagram.png)
 
+The above sequence diagram assumes that there are unlearned flashcards in the deck to quiz. If there are no unlearned flashcards in the deck, an exception would be thrown (mentioned later), that is not represented in this diagram.
 #### Implementation
 
 `quizFlashcards()`
