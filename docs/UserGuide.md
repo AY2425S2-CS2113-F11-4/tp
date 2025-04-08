@@ -403,6 +403,7 @@ Unselects the specified deck. There must be a deck selected to use this command.
 ---
 
 ## Command Summary
+
 | Action           | Format, Examples                                                                                  |
 |------------------|---------------------------------------------------------------------------------------------------|
 | View User Guide  | `user_guide`                                                                                      |
@@ -425,7 +426,3 @@ Unselects the specified deck. There must be a deck selected to use this command.
 | Mark Learned     | `mark_learned INDEX` e.g. `mark_learned 2`                                                        |
 | Mark Unlearned   | `mark_unlearned INDEX` e.g. `mark_unlearned 2`                                                    |
 | Exit             | `exit`                                                                                            |
-
-
-
-
