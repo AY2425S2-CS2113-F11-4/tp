@@ -35,10 +35,13 @@ Given below are my contributions to the project
 
 ### Other aspects
 #### **Project Management / Contribution to Team-Based Tasks:**
-1. Updating issue tracker by closing issues already completed based on teammates' PR
+1. Updating issue tracker by closing 6 issues already completed based on teammates' PR
 2. Triaging 5 bugs transferred from the PE Dry Run by assigning members, tagging priority and bug type
 3. Reviewing over 11 of the team's PRs
 4. Set up GitHub repo together as a team
+5. Released 2.1 version.
+6. Executing system and acceptance test for the entire codebase and find 5 bugs of teammates to edit,
+   ranging from medium to low leve serverity.
 
 - Code contributed: [RepoSense link](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?search=manz9802&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2025-02-21&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other)
 - **Documentation:**
